@@ -2,20 +2,24 @@ import os
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from passlib.context import CryptContext
-from postgrest import APIError
 from pydantic import BaseModel
 
 from db import supabase
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
-TOKEN_EXPIRATION_TIME_MINUTS = os.getenv("TOKEN_EXPIRATION_TIME_MINUTS")
+TOKEN_EXPIRATION_TIME_MINUTS = int(os.getenv("TOKEN_EXPIRATION_TIME_MINUTS"))
 
 router = APIRouter(
     prefix="/auth", tags=["auth"], responses={404: {"description": "Not found"}}
 )
+
+
+class LoginRequest(BaseModel):
+    Email: str
+    Password: str
 
 
 class Token(BaseModel):
@@ -31,7 +35,7 @@ class User(BaseModel):
     User_id: int
     Name: str
     Email: str
-    Groups_joined: list[int]
+    Groups_joined: list[int] | None = None
 
 
 class UserDB(User):
@@ -39,11 +43,16 @@ class UserDB(User):
 
 
 pwdContext = CryptContext(schemes=["bcrypt"], deprecated="auto")
-OAuth2Scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+security = HTTPBearer()
 
 
 def verifyPass(password, hashedPass):
     return pwdContext.verify(password, hashedPass)
+    # print("Password entered:", repr(password))
+    # print("Hash:", hashedPass)
+    # result = pwdContext.verify(password, hashedPass)
+    # print("Verify result:", result)
+    # return result
 
 
 def hashPass(password):
@@ -57,8 +66,8 @@ def getUser(email):
         )
         print(response.data)
         return UserDB(**response.data)
-
-    except:
+    except Exception as e:
+        print(e)
         return None
 
 
@@ -81,7 +90,8 @@ def createAccessToken(data, expiresDelta):
     return encoded
 
 
-async def getCurrentUser(token=Depends(OAuth2Scheme)):
+async def getCurrentUser(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
     credentialException = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not authenticate the credentials",
@@ -105,8 +115,8 @@ async def getCurrentUser(token=Depends(OAuth2Scheme)):
 
 
 @router.post("/login", response_model=Token)
-async def login(formData: OAuth2PasswordRequestForm = Depends()):
-    user = authenticateUser(formData.username, formData.password)
+async def login(formData: LoginRequest = Depends()):
+    user = authenticateUser(formData.Email, formData.Password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -118,3 +128,8 @@ async def login(formData: OAuth2PasswordRequestForm = Depends()):
         data={"sub": user.Email}, expiresDelta=accessTokenExpire
     )
     return {"access_token": accessToken, "token_type": "bearer"}
+
+
+@router.patch("/me", response_model=User)
+async def me(currUser=Depends(getCurrentUser)):
+    return currUser
