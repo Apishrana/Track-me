@@ -17,10 +17,18 @@ if [[ ! -f backend/.env ]] || \
    ! grep -q "^BACKEND_HOST=" backend/.env || \
    ! grep -q "^BACKEND_PORT=" backend/.env; then
 cat > backend/.env <<EOF
+# Supabase
 SUPABASE_URL=Use Your Url
 SUPABASE_KEY=Use Your Key
+
+# Backend
 BACKEND_HOST=0.0.0.0
 BACKEND_PORT=8000
+
+# Auth
+SECRET_KEY=Generate A Key Using `openssl rand -hex 32`
+ALGORITHM=HS256
+TOKEN_EXPIRATION_TIME_MINUTS=1440
 EOF
     echo "backend/.env created/updated"
 fi

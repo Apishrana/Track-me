@@ -1,18 +1,18 @@
 from fastapi import FastAPI
 from dotenv import load_dotenv
-from supabase import create_client
 import uvicorn
 import os
 
+from Routs import auth
+
 load_dotenv()
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 BACKEND_HOST = os.getenv("BACKEND_HOST")
 BACKEND_PORT = int(os.getenv("BACKEND_PORT"))
 
+
 app = FastAPI()
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+app.include_router(auth.router)
 
 
 @app.get("/")

@@ -1,3 +1,5 @@
 fastapi[all]
 supabase
 python-dotenv
+passlib
+python-jose 
