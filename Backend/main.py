@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status
 from dotenv import load_dotenv
+from fastapi.responses import RedirectResponse
 import uvicorn
 import os
 
 from Routs import auth
+from Routs import user
 
 load_dotenv()
 
@@ -13,11 +15,22 @@ BACKEND_PORT = int(os.getenv("BACKEND_PORT"))
 
 app = FastAPI()
 app.include_router(auth.router)
+app.include_router(user.router)
 
 
 @app.get("/")
 def root():
-    return {"Msg": 67}
+    return RedirectResponse(url="/docs", status_code=status.HTTP_307_TEMPORARY_REDIRECT)
+
+
+"""
+    <html>
+        <head><title>Location Backend</title></head>
+        <body>
+        <a href='/docs'>,</a>
+        </body>
+    </html>
+    """
 
 
 if __name__ == "__main__":

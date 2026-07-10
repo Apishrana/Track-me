@@ -28,7 +28,7 @@ BACKEND_PORT=8000
 # Auth
 SECRET_KEY=Generate A Key Using `openssl rand -hex 32`
 ALGORITHM=HS256
-TOKEN_EXPIRATION_TIME_MINUTS=1440
+TOKEN_EXPIRATION_TIME_MINUTS=525600
 EOF
     echo "backend/.env created/updated"
 fi
