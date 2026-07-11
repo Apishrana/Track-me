@@ -6,6 +6,7 @@ import os
 
 from Routs import auth
 from Routs import user
+from Routs import groups
 
 load_dotenv()
 
@@ -16,6 +17,7 @@ BACKEND_PORT = int(os.getenv("BACKEND_PORT"))
 app = FastAPI()
 app.include_router(auth.router)
 app.include_router(user.router)
+app.include_router(groups.router)
 
 
 @app.get("/")

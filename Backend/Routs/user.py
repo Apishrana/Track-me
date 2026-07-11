@@ -21,7 +21,7 @@ async def me(currUser=Depends(getCurrentUser)):
 
 
 @router.post("/update/name", response_model=User)
-async def updateUsername(
+async def update_username(
     username: UpdateUsernameModel, currUser: UserDB = Depends(getCurrentUser)
 ):
     currUser.Name = username.newName
@@ -30,7 +30,7 @@ async def updateUsername(
 
 
 @router.post("/update/Email", response_model=User)
-async def updateEmail(
+async def update_email(
     Email: UpdateEmailModel, currUser: UserDB = Depends(getCurrentUser)
 ):
     currUser.Email = Email.Email
@@ -39,7 +39,7 @@ async def updateEmail(
 
 
 @router.post("/update/Password", response_model=User)
-async def updatePassword(
+async def update_password(
     password: UpdatePasswordModel, currUser: UserDB = Depends(getCurrentUser)
 ):
     if not verifyPass(password.oldPassword, currUser.Password):
