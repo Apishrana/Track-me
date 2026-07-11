@@ -23,7 +23,19 @@ def hashPass(password):
     return pwdContext.hash(password)
 
 
-def getUser(email):
+def getUser(userId):
+    try:
+        response = (
+            supabase.table("Users").select("*").eq("User_id", userId).single().execute()
+        )
+        print(response.data)
+        return UserDB(**response.data)
+    except Exception as e:
+        print(e)
+        return None
+
+
+def getUserFromEmail(email):
     try:
         response = (
             supabase.table("Users").select("*").eq("Email", email).single().execute()
@@ -36,7 +48,7 @@ def getUser(email):
 
 
 def authenticateUser(email, password):
-    user = getUser(email)
+    user = getUserFromEmail(email)
     if not user:
         return False
     if not verifyPass(password, user.Password):
@@ -63,15 +75,16 @@ async def getCurrentUser(credentials: HTTPAuthorizationCredentials = Depends(sec
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email = payload["sub"]
-        if email is None:
+        userId = int(payload["sub"])
+        if userId is None:
             raise credentialException
-        tokenData = TokenData(Email=email)
+        tokenData = TokenData(User_id=userId)
 
-    except JWTError:
+    except JWTError as e:
+        print(e)
         raise credentialException
 
-    user = getUser(email=tokenData.Email)
+    user = getUser(userId=tokenData.User_id)
     if user is None:
         raise credentialException
 

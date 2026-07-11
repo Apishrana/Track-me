@@ -25,7 +25,7 @@ async def login(formData: LoginRequest = Depends()):
         )
     accessTokenExpire = timedelta(minutes=TOKEN_EXPIRATION_TIME_MINUTS)
     accessToken = createAccessToken(
-        data={"sub": user.Email}, expiresDelta=accessTokenExpire
+        data={"sub": str(user.User_id)}, expiresDelta=accessTokenExpire
     )
     return {"access_token": accessToken, "token_type": "bearer"}
 

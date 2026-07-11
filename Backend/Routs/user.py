@@ -7,7 +7,7 @@ from models.user import (
     UpdateEmailModel,
     UpdatePasswordModel,
 )
-from Dependencies.auth import authenticateUser, getCurrentUser, hashPass, verifyPass
+from Dependencies.auth import getCurrentUser, hashPass, verifyPass
 from Dependencies.user import updateUserData
 
 router = APIRouter(
