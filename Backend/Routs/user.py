@@ -42,7 +42,7 @@ async def groups_invite(currUser: User = Depends(getCurrentUser)):
     return {"Groups": returnData}
 
 
-@router.post("/update/name", response_model=User)
+@router.patch("/update/name", response_model=User)
 async def update_username(
     username: UpdateUsernameModel, currUser: UserDB = Depends(getCurrentUser)
 ):
@@ -51,7 +51,7 @@ async def update_username(
     return currUser
 
 
-@router.post("/update/Email", response_model=User)
+@router.patch("/update/Email", response_model=User)
 async def update_email(
     Email: UpdateEmailModel, currUser: UserDB = Depends(getCurrentUser)
 ):
@@ -60,7 +60,7 @@ async def update_email(
     return currUser
 
 
-@router.post("/update/Password", response_model=User)
+@router.patch("/update/Password", response_model=User)
 async def update_password(
     password: UpdatePasswordModel, currUser: UserDB = Depends(getCurrentUser)
 ):

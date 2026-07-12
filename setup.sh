@@ -12,6 +12,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 if [[ ! -f backend/.env ]] || \
+   ! grep -q "^FIREBASE_CREDENTIALS=" backend/.env || \
    ! grep -q "^DEBUG=" backend/.env || \
    ! grep -q "^SUPABASE_URL=" backend/.env || \
    ! grep -q "^SUPABASE_KEY=" backend/.env || \
@@ -30,6 +31,9 @@ BACKEND_PORT=8000
 SECRET_KEY=Generate A Key Using `openssl rand -hex 32`
 ALGORITHM=HS256
 TOKEN_EXPIRATION_TIME_MINUTS=525600
+
+# Firebase
+FIREBASE_CREDENTIALS=Use Your firebase.json
 
 DEBUG=True
 EOF

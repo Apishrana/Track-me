@@ -34,6 +34,7 @@ class User(BaseModel):
 
 class UserDB(User):
     Password: str
+    Fcm_token: str
 
 
 class UpdateUsernameModel(BaseModel):

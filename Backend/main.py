@@ -7,6 +7,7 @@ import os
 from Routs import auth
 from Routs import user
 from Routs import groups
+from Routs import location
 
 load_dotenv()
 
@@ -19,6 +20,7 @@ app = FastAPI(openapi_url="/openapi.json" if DEBUG else None)
 app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(groups.router)
+app.include_router(location.router)
 
 
 @app.get("/")
