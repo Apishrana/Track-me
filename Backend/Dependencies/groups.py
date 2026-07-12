@@ -1,5 +1,6 @@
+from Models.groups import GroupDB
 from Dependencies.user import updateUserData
-from models.user import UserDB
+from Models.user import UserDB
 from db import supabase
 
 
@@ -14,3 +15,11 @@ async def createGroup(groupName, user: UserDB):
     user.Groups_joined.append(groupID)
     await updateUserData(user)
     return groupID
+
+
+async def getGroup(groupID):
+    response = (
+        supabase.table("Groups").select("*").eq("Group_id", groupID).single().execute()
+    )
+    print(response.data)
+    return GroupDB(**response.data)

@@ -15,15 +15,20 @@ class User(BaseModel):
     Name: str
     Email: str
     Groups_joined: list[int] = Field(default_factory=list)
+    Groups_invited: list[int] = Field(default_factory=list)
 
     @field_validator("Groups_joined", mode="before")
     @classmethod
     def none_to_empty_list(cls, v):
-
         if v is None:
-
             return []
+        return v
 
+    @field_validator("Groups_invited", mode="before")
+    @classmethod
+    def none_to_empty_list(cls, v):
+        if v is None:
+            return []
         return v
 
 

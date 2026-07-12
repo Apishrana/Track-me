@@ -1,4 +1,4 @@
-from models.user import UserDB
+from Models.user import UserDB
 from db import supabase
 
 

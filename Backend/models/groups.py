@@ -9,9 +9,14 @@ class Group(BaseModel):
     Group_name: str
 
 
-class GroupDB(BaseModel):
+class GroupDB(Group):
     Created_at: datetime
 
 
 class CreateGroupModel(BaseModel):
-    groupName: str
+    GroupName: str
+
+
+class GroupInviteModel(BaseModel):
+    groupID: str
+    UserEmail: list[str]

@@ -12,9 +12,10 @@ load_dotenv()
 
 BACKEND_HOST = os.getenv("BACKEND_HOST")
 BACKEND_PORT = int(os.getenv("BACKEND_PORT"))
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 
-app = FastAPI()
+app = FastAPI(openapi_url="/openapi.json" if DEBUG else None)
 app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(groups.router)

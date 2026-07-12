@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from db import supabase
 from Dependencies.auth import authenticateUser, createAccessToken, hashPass
-from models.user import Token
-from models.auth import LoginRequest, SignupRequest
+from Models.user import Token
+from Models.auth import LoginRequest, SignupRequest
 
 TOKEN_EXPIRATION_TIME_MINUTS = int(os.getenv("TOKEN_EXPIRATION_TIME_MINUTS"))
 

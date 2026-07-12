@@ -1,6 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from models.user import (
+from Models.groups import GroupDB
+from Dependencies.groups import getGroup
+from Models.user import (
     UpdateUsernameModel,
     User,
     UserDB,
@@ -18,6 +20,26 @@ router = APIRouter(
 @router.get("/me", response_model=User)
 async def me(currUser=Depends(getCurrentUser)):
     return currUser
+
+
+@router.get("/groups/joined")
+async def groups_joined(currUser: User = Depends(getCurrentUser)):
+    joinedGroups = currUser.Groups_joined
+    returnData = []
+    for i in joinedGroups:
+        grp: GroupDB = await getGroup(i)
+        returnData.append(grp)
+    return {"Groups": returnData}
+
+
+@router.get("/groups/invite")
+async def groups_invite(currUser: User = Depends(getCurrentUser)):
+    invitedGroups = currUser.Groups_invited
+    returnData = []
+    for i in invitedGroups:
+        grp: GroupDB = await getGroup(i)
+        returnData.append(grp)
+    return {"Groups": returnData}
 
 
 @router.post("/update/name", response_model=User)
