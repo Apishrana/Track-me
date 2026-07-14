@@ -38,6 +38,7 @@ async def upload_location(
     cnf = await uploadLocation(
         longitude=formData.Longitude,
         latitude=formData.Latitude,
+        accuracy=formData.Accuracy,
         userID=currUser.User_id,
     )
     return cnf

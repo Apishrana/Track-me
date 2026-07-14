@@ -9,11 +9,13 @@ class Location(BaseModel):
     Latitude: float
     User_id: int
     Created_at: datetime
+    Accuracy: float
 
 
 class UploadLocationModel(BaseModel):
     Longitude: float
     Latitude: float
+    Accuracy: float
 
 
 class RequestLocationModel(BaseModel):
