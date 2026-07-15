@@ -40,5 +40,28 @@ EOF
     echo "backend/.env created/updated"
 fi
 
-cd ./backend/
-python main.py
+if [[ ! -f App/.env ]] || \
+   ! grep -q "^EXPO_PUBLIC_BACKEND_URL=" App/.env || \
+   ! grep -q "^EXPO_PUBLIC_GOOGLE_MAPS_KEY=" App/.env; then
+cat > App/.env <<EOF
+EXPO_PUBLIC_BACKEND_URL=http://0.0.0.0:8000
+EXPO_PUBLIC_GOOGLE_MAPS_KEY=your_key_here
+EOF
+    echo "App/.env created/updated"
+fi
+
+
+(
+    cd ./backend || exit 1
+    exec python main.py
+) &
+BACKEND_PID=$!
+
+trap '
+kill -TERM $BACKEND_PID 2>/dev/null
+pkill -P $BACKEND_PID 2>/dev/null
+wait $BACKEND_PID 2>/dev/null
+' EXIT INT TERM
+
+cd ./app || exit 1
+npm install && npm start
