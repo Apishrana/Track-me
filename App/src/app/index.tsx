@@ -13,7 +13,6 @@ export default function HomeScreen() {
 
     useEffect(() => {
         (async () => {
-            // Request permission
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -22,7 +21,6 @@ export default function HomeScreen() {
                 return;
             }
 
-            // Get current location
             const currentLocation = await Location.getCurrentPositionAsync({
                 accuracy: Location.Accuracy.High,
             });

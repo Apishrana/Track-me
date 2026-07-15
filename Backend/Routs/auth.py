@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from db import supabase
 from Dependencies.auth import authenticateUser, createAccessToken, hashPass
-from Models.user import Token
+from Models.user import Token, User
 from Models.auth import LoginRequest, SignupRequest
 
 TOKEN_EXPIRATION_TIME_MINUTS = int(os.getenv("TOKEN_EXPIRATION_TIME_MINUTS"))
@@ -38,9 +38,9 @@ async def signup(formData: SignupRequest = Depends()):
         "Password": hashPass(formData.Password),
     }
     supabase.table("Users").insert(data).execute()
-    user = authenticateUser(formData.Email, formData.Password)
+    user: User = authenticateUser(formData.Email, formData.Password)
     accessTokenExpire = timedelta(minutes=TOKEN_EXPIRATION_TIME_MINUTS)
     accessToken = createAccessToken(
-        data={"sub": user.Email}, expiresDelta=accessTokenExpire
+        data={"sub": user.User_id}, expiresDelta=accessTokenExpire
     )
     return {"access_token": accessToken, "token_type": "bearer"}
