@@ -14,8 +14,8 @@ class User(BaseModel):
     User_id: int
     Name: str
     Email: str
-    Groups_joined: list[int] = Field(default_factory=list)
-    Groups_invited: list[int] = Field(default_factory=list)
+    Groups_joined: list[int] | None = None
+    Groups_invited: list[int] | None = None
 
     @field_validator("Groups_joined", mode="before")
     @classmethod
@@ -34,7 +34,7 @@ class User(BaseModel):
 
 class UserDB(User):
     Password: str
-    Fcm_token: str
+    Fcm_token: str | None = None
 
 
 class UpdateUsernameModel(BaseModel):

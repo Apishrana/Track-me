@@ -25,6 +25,8 @@ async def me(currUser=Depends(getCurrentUser)):
 @router.get("/groups/joined")
 async def groups_joined(currUser: User = Depends(getCurrentUser)):
     joinedGroups = currUser.Groups_joined
+    if joinedGroups is None:
+        joinedGroups = []
     returnData = []
     for i in joinedGroups:
         grp: GroupDB = await getGroup(i)
@@ -35,6 +37,8 @@ async def groups_joined(currUser: User = Depends(getCurrentUser)):
 @router.get("/groups/invite")
 async def groups_invite(currUser: User = Depends(getCurrentUser)):
     invitedGroups = currUser.Groups_invited
+    if invitedGroups is None:
+        invitedGroups = []
     returnData = []
     for i in invitedGroups:
         grp: GroupDB = await getGroup(i)

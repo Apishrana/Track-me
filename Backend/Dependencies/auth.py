@@ -50,8 +50,10 @@ def getUserFromEmail(email):
 def authenticateUser(email, password):
     user = getUserFromEmail(email)
     if not user:
+        print(1)
         return False
     if not verifyPass(password, user.Password):
+        print(0)
         return False
 
     return user
