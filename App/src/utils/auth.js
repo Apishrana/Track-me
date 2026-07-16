@@ -7,7 +7,7 @@ async function login(email, password) {
             Password: password,
         };
         const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
-        const res = fetch(apiUrl + '/auth/login', {
+        const res = fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ async function signup(email, password, name) {
             Name: name,
         };
         const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
-        const res = fetch(apiUrl + '/auth/signup', {
+        const res = fetch(`${apiUrl}/auth/signup`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,3 +49,4 @@ async function signup(email, password, name) {
         console.error(e);
     }
 }
+export { login, signup };

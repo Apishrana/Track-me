@@ -18,7 +18,7 @@ async def uploadLocation(longitude, latitude, accuracy, userID):
         "Latitude": latitude,
         "Longitude": longitude,
         "Accuracy": accuracy,
-        "User_id": [userID],
+        "User_id": userID,
     }
     res = supabase.table("Location").insert(data).execute()
     print(res.data[0])
