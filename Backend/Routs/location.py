@@ -16,7 +16,7 @@ router = APIRouter(
 async def get_location(
     group_id: int, user_id: int, currUser: User = Depends(getCurrentUser)
 ):
-    group: Group = getGroup(group_id)
+    group: Group = await getGroup(group_id)
     if not (user_id in group.Users and currUser.User_id in group.Users):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -30,7 +30,7 @@ async def get_location(
 async def request_location(
     formData: RequestLocationModel, currUser: User = Depends(getCurrentUser)
 ):
-    group: Group = getGroup(formData.Group_id)
+    group: Group = await getGroup(formData.Group_id)
     if not (formData.Target_id in group.Users and currUser.User_id in group.Users):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
