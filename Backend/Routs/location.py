@@ -12,16 +12,26 @@ router = APIRouter(
 )
 
 
-@router.get("/get/{user_id}")
-async def get_location(user_id: int):
+@router.get("/get/")
+async def get_location(
+    group_id: int, user_id: int, currUser: User = Depends(getCurrentUser)
+):
+    group: Group = getGroup(group_id)
+    if not (user_id in group.Users and currUser.User_id in group.Users):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Users not in the same group",
+        )
     data = getLocation(user_id=user_id)
     return data
 
 
 @router.post("/request")
-async def request_location(formData: RequestLocationModel):
+async def request_location(
+    formData: RequestLocationModel, currUser: User = Depends(getCurrentUser)
+):
     group: Group = getGroup(formData.Group_id)
-    if formData.Target_id in group.Users and formData.Requester_id in group.Users:
+    if not (formData.Target_id in group.Users and currUser.User_id in group.Users):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Users not in the same group",

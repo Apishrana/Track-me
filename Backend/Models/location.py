@@ -19,6 +19,5 @@ class UploadLocationModel(BaseModel):
 
 
 class RequestLocationModel(BaseModel):
-    Requester_id: int
     Target_id: int
     Group_id: int

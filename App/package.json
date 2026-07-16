@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.4",
+    "@maplibre/maplibre-react-native": "^11.3.6",
     "expo": "~57.0.4",
     "expo-constants": "~57.0.3",
     "expo-dev-client": "~57.0.5",
@@ -14,6 +15,7 @@
     "expo-linking": "~57.0.2",
     "expo-location": "~57.0.2",
     "expo-router": "~57.0.4",
+    "expo-secure-store": "~57.0.1",
     "expo-splash-screen": "~57.0.2",
     "expo-status-bar": "~57.0.0",
     "expo-symbols": "~57.0.0",

@@ -18,5 +18,5 @@ class CreateGroupModel(BaseModel):
 
 
 class GroupInviteModel(BaseModel):
-    groupID: str
+    groupID: int
     UserEmail: list[str]
