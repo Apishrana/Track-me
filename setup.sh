@@ -42,10 +42,10 @@ fi
 
 if [[ ! -f App/.env ]] || \
    ! grep -q "^EXPO_PUBLIC_BACKEND_URL=" App/.env || \
-   ! grep -q "^EXPO_PUBLIC_GOOGLE_MAPS_KEY=" App/.env; then
+   ! grep -q "^EXPO_PUBLIC_MAPTILER_KEY=" App/.env; then
 cat > App/.env <<EOF
 EXPO_PUBLIC_BACKEND_URL=http://0.0.0.0:8000
-EXPO_PUBLIC_GOOGLE_MAPS_KEY=your_key_here
+EXPO_PUBLIC_MAPTILER_KEY=your_key_here
 EOF
     echo "App/.env created/updated"
 fi

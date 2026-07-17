@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
-import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -10,6 +11,7 @@ export default function HomeScreen() {
         null,
     );
     const [error, setError] = useState<string | null>(null);
+    const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
 
     useEffect(() => {
         (async () => {
@@ -46,6 +48,43 @@ export default function HomeScreen() {
                     <ThemedText>
                         Accuracy: {location.coords.accuracy} m
                     </ThemedText>
+                    <Map
+                        style={styles.map}
+                        // mapStyle="https://tiles.openfreemap.org/styles/liberty"
+                        // mapStyle={`https://api.maptiler.com/maps/hybrid-v4/style.json?key=${MAPTILER_KEY}`}
+                        mapStyle={`https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`}
+                        // mapStyle={styl}
+                    >
+                        <Camera
+                            initialViewState={{
+                                center: [
+                                    // location.coords.longitude,
+                                    // location.coords.latitude,
+                                    76.779464, 30.353844,
+                                ],
+                                zoom: 17,
+                                // zoom: 10,
+                            }}
+                        />
+                        <Marker
+                            lngLat={[
+                                // location.coords.longitude,
+                                // location.coords.latitude,
+                                76.779464, 30.353844,
+                            ]}>
+                            <View
+                                style={{
+                                    width: 18,
+                                    height: 18,
+                                    borderRadius: 9,
+                                    backgroundColor: 'red',
+                                    borderWidth: 2,
+                                    borderColor: 'white',
+                                }}
+                            />
+                        </Marker>
+                    </Map>
+                    <ThemedText>TEST 12345</ThemedText>
                 </>
             ) : (
                 <ThemedText>Getting location...</ThemedText>
@@ -57,8 +96,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         gap: 8,
+    },
+    map: {
+        flex: 1,
+        width: '100%',
     },
 });
