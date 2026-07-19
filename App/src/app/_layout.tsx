@@ -21,7 +21,7 @@ export default function TabLayout() {
                 //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZXhwIjoxODE2MDI0Mzk0fQ.ARs5kkgjVN5yj-3SGahWTYjIDafivJxEpGsB6lPdfcs',
                 // );
                 const token = await SecureStore.getItemAsync('access_token');
-                const res = await fetch(`${apiUrl}user/debug`, {
+                const res = await fetch(`${apiUrl}user/Debug`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

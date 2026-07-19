@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request
-
 from Models.groups import GroupDB
 from Dependencies.groups import getGroup
 from Models.user import (
@@ -17,7 +16,8 @@ router = APIRouter(
 )
 
 
-@router.get("/Debug", response_model=User)
+@router.get(
+    "/Debug")
 async def debug(request: Request):
 
     return {
