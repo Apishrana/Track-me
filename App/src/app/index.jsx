@@ -7,10 +7,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function HomeScreen() {
-    const [location, setLocation] = useState<Location.LocationObject | null>(
-        null,
-    );
-    const [error, setError] = useState<string | null>(null);
+    const [location, setLocation] = useState(null);
+    const [error, setError] = useState(null);
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
 
     useEffect(() => {
