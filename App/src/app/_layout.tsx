@@ -1,17 +1,44 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import * as SplashScreen from 'expo-splash-screen';
 import { useColorScheme } from 'react-native';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import AppTabs from '@/components/app-tabs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
     const [login, setLogin] = useState(false);
     const colorScheme = useColorScheme();
-    // const getUser = () => {};
+    const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+    useEffect(() => {
+        const loadUser = async () => {
+            try {
+                await SecureStore.setItemAsync('access_token', '234w567');
+                const token = await SecureStore.getItemAsync('access_token');
+                const res = await fetch(`${apiUrl}user/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                if (!res.ok) {
+                    console.log(1234);
+                    setLogin(false);
+                    return;
+                }
+                const user = res.json();
+                console.log(user);
+            } catch (e) {
+                console.log(e);
+                setLogin(false);
+            }
+        };
+        loadUser();
+    }, []);
     return (
         <ThemeProvider
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

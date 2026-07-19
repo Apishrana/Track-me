@@ -1,7 +1,7 @@
 async function getLocation(token, groupID, userID) {
     try {
         const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
-        const res = fetch(
+        const res = await fetch(
             `${apiUrl}location/get/?group_id=${groupID}&user_id=${userID}`,
             {
                 method: 'GET',
@@ -29,7 +29,7 @@ async function uploadLocation(token, longitude, latitude, accuracy) {
             Latitude: latitude,
             Accuracy: accuracy,
         };
-        const res = fetch(`${apiUrl}/auth/login`, {
+        const res = await fetch(`${apiUrl}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,4 +47,3 @@ async function uploadLocation(token, longitude, latitude, accuracy) {
         console.error(e);
     }
 }
-

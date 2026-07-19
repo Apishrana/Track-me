@@ -2,7 +2,7 @@ import os
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from Backend.Dependencies.user import updateUserData
+from Dependencies.user import updateUserData
 from db import supabase
 from Dependencies.auth import authenticateUser, createAccessToken, hashPass
 from Models.user import Token, User
