@@ -37,17 +37,6 @@ export default function HomeScreen() {
                 <ThemedText>{error}</ThemedText>
             ) : location ? (
                 <>
-                    <ThemedText>
-                        Latitude: {location.coords.latitude}
-                    </ThemedText>
-
-                    <ThemedText>
-                        Longitude: {location.coords.longitude}
-                    </ThemedText>
-
-                    <ThemedText>
-                        Accuracy: {location.coords.accuracy} m
-                    </ThemedText>
                     <Map
                         style={styles.map}
                         // mapStyle="https://tiles.openfreemap.org/styles/liberty"
@@ -58,19 +47,18 @@ export default function HomeScreen() {
                         <Camera
                             initialViewState={{
                                 center: [
-                                    // location.coords.longitude,
-                                    // location.coords.latitude,
-                                    76.779464, 30.353844,
+                                    location.coords.longitude,
+                                    location.coords.latitude,
                                 ],
                                 zoom: 17,
                                 // zoom: 10,
                             }}
                         />
                         <Marker
+                            id="current-location"
                             lngLat={[
-                                // location.coords.longitude,
-                                // location.coords.latitude,
-                                76.779464, 30.353844,
+                                location.coords.longitude,
+                                location.coords.latitude,
                             ]}>
                             <View
                                 style={{
@@ -84,7 +72,19 @@ export default function HomeScreen() {
                             />
                         </Marker>
                     </Map>
-                    <ThemedText>TEST 12345</ThemedText>
+                    <ThemedView>
+                        <ThemedText>
+                            Latitude: {location.coords.latitude}
+                        </ThemedText>
+
+                        <ThemedText>
+                            Longitude: {location.coords.longitude}
+                        </ThemedText>
+
+                        <ThemedText>
+                            Accuracy: {location.coords.accuracy} m
+                        </ThemedText>
+                    </ThemedView>
                 </>
             ) : (
                 <ThemedText>Getting location...</ThemedText>
@@ -96,10 +96,10 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        gap: 8,
+        // gap: 8,
     },
     map: {
-        flex: 1,
+        height: '80%',
         width: '100%',
     },
 });

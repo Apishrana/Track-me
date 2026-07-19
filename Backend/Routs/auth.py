@@ -2,6 +2,7 @@ import os
 from datetime import timedelta
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from Backend.Dependencies.user import updateUserData
 from db import supabase
 from Dependencies.auth import authenticateUser, createAccessToken, hashPass
 from Models.user import Token, User
@@ -27,6 +28,8 @@ async def login(formData: LoginRequest = Depends()):
     accessToken = createAccessToken(
         data={"sub": str(user.User_id)}, expiresDelta=accessTokenExpire
     )
+    user.Fcm_token = formData.Fcm_token
+    await updateUserData(user)
     return {"access_token": accessToken, "token_type": "bearer"}
 
 
@@ -36,6 +39,7 @@ async def signup(formData: SignupRequest = Depends()):
         "Name": formData.Name,
         "Email": formData.Email,
         "Password": hashPass(formData.Password),
+        "Fcm_token": formData.Fcm_token,
     }
     supabase.table("Users").insert(data).execute()
     user: User = authenticateUser(formData.Email, formData.Password)

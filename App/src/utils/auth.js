@@ -1,10 +1,17 @@
+import messaging from '@react-native-firebase/messaging';
 import * as SecureStore from 'expo-secure-store';
 
 async function login(email, password) {
     try {
+        await messaging().requestPermission();
+        await messaging().registerDeviceForRemoteMessages();
+
+        const fcmToken = await messaging().getToken();
+
         const userData = {
             Email: email,
             Password: password,
+            Fcm_token: fcmToken,
         };
         const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
         const res = fetch(`${apiUrl}/auth/login`, {
@@ -26,10 +33,15 @@ async function login(email, password) {
 }
 async function signup(email, password, name) {
     try {
+        await messaging().requestPermission();
+        await messaging().registerDeviceForRemoteMessages();
+
+        const fcmToken = await messaging().getToken();
         const userData = {
             Email: email,
             Password: password,
             Name: name,
+            Fcm_token: fcmToken,
         };
         const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
         const res = fetch(`${apiUrl}/auth/signup`, {
