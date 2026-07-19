@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 
 from Models.groups import GroupDB
 from Dependencies.groups import getGroup
@@ -15,6 +15,15 @@ from Dependencies.user import updateUserData
 router = APIRouter(
     prefix="/user", tags=["user"], responses={404: {"description": "Not found"}}
 )
+
+
+@router.get("/Debug", response_model=User)
+async def debug(request: Request):
+
+    return {
+        "authorization": request.headers.get("authorization"),
+        "headers": dict(request.headers),
+    }
 
 
 @router.get("/me", response_model=User)

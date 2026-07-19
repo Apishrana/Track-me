@@ -16,21 +16,30 @@ export default function TabLayout() {
     useEffect(() => {
         const loadUser = async () => {
             try {
-                await SecureStore.setItemAsync('access_token', '234w567');
+                // await SecureStore.setItemAsync(
+                //     'access_token',
+                //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1IiwiZXhwIjoxODE2MDI0Mzk0fQ.ARs5kkgjVN5yj-3SGahWTYjIDafivJxEpGsB6lPdfcs',
+                // );
                 const token = await SecureStore.getItemAsync('access_token');
-                const res = await fetch(`${apiUrl}user/me`, {
+                const res = await fetch(`${apiUrl}user/debug`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
                 });
+
+                console.log('Token:', token);
+                console.log('Header:', `Bearer ${token}`);
                 if (!res.ok) {
-                    console.log(1234);
+                    console.log('Status:', res.status);
+                    console.log('Body:', await res.text());
+
+                    console.log(res);
                     setLogin(false);
                     return;
                 }
-                const user = res.json();
+                const user = await res.json();
                 console.log(user);
             } catch (e) {
                 console.log(e);
