@@ -16,13 +16,13 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "/Debug")
+@router.get("/Debug")
 async def debug(request: Request):
-
     return {
-        "authorization": request.headers.get("authorization"),
         "headers": dict(request.headers),
+        "scope_headers": [
+            [k.decode(), v.decode()] for k, v in request.scope["headers"]
+        ],
     }
 
 
