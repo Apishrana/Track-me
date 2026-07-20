@@ -46,3 +46,5 @@ google-services.json
 android/app/google-services.json
 GoogleService-Info.plist
 ios/GoogleService-Info.plist
+
+*.test

@@ -38,9 +38,8 @@ export default function HomeScreen() {
                     <Map
                         style={styles.map}
                         // mapStyle="https://tiles.openfreemap.org/styles/liberty"
-                        // mapStyle={`https://api.maptiler.com/maps/hybrid-v4/style.json?key=${MAPTILER_KEY}`}
                         mapStyle={`https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`}
-                        // mapStyle={styl}
+                        // mapStyle={`https://api.maptiler.com/maps/hybrid-v4/style.json?key=${MAPTILER_KEY}`}
                     >
                         <Camera
                             initialViewState={{
