@@ -16,6 +16,7 @@ export default function TabLayout() {
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
     useEffect(() => {
         const loadUser = async () => {
+            // await SecureStore.setItemAsync("access_token", '');
             try {
                 const token = await SecureStore.getItemAsync('access_token');
                 const res = await fetch(`${apiUrl}user/me`, {

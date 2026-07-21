@@ -1,8 +1,9 @@
 import messaging from '@react-native-firebase/messaging';
 import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
+import Button from '../button';
 import { ThemedText } from '../themed-text';
 import { ThemedTextInput } from '../themed-text-input';
 import { ThemedView } from '../themed-view';
@@ -33,8 +34,9 @@ export default function Login(setLoginMode) {
                 throw new Error(`HTTP error! Status: ${res.status}, ${res}`);
             }
             const response = await res.json();
-            token = response.access_token;
+            const token = response.access_token;
             await SecureStore.setItemAsync('access_token', token);
+            console.log(token);
         } catch (e) {
             console.log(e);
         }
@@ -57,17 +59,6 @@ export default function Login(setLoginMode) {
             padding: 12,
             marginBottom: 15,
         },
-        button: {
-            backgroundColor: '#007AFF',
-            padding: 14,
-            borderRadius: 8,
-            alignItems: 'center',
-        },
-        buttonText: {
-            color: 'white',
-            fontWeight: '600',
-            fontSize: 16,
-        },
     });
     return (
         <ThemedView style={styles.container}>
@@ -88,9 +79,7 @@ export default function Login(setLoginMode) {
                 value={password}
                 onChangeText={setPassword}
             />
-            <Pressable style={styles.button} onPress={login}>
-                <ThemedText style={styles.buttonText}>Login</ThemedText>
-            </Pressable>
+            <Button children={'Login'} onPress={login} />
             <GoogleLogin />
         </ThemedView>
     );
