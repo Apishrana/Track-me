@@ -51,6 +51,6 @@ async def signup(formData: SignupRequest = Depends()):
         )
     accessTokenExpire = timedelta(minutes=TOKEN_EXPIRATION_TIME_MINUTS)
     accessToken = createAccessToken(
-        data={"sub": user.User_id}, expiresDelta=accessTokenExpire
+        data={"sub": str(user.User_id)}, expiresDelta=accessTokenExpire
     )
     return {"access_token": accessToken, "token_type": "bearer"}

@@ -39,8 +39,11 @@ export default function Signup({ setLoginMode }) {
             }
             const response = await res.json();
             const token = response.access_token;
+            console.log(1);
             console.log(token);
             await SecureStore.setItemAsync('access_token', token);
+            console.log(2);
+            console.log(await SecureStore.getItemAsync('access_token'));
         } catch (e) {
             console.log(e);
         }
