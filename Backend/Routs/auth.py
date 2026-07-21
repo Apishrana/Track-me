@@ -43,6 +43,12 @@ async def signup(formData: SignupRequest = Depends()):
     }
     supabase.table("Users").insert(data).execute()
     user: User = authenticateUser(formData.Email, formData.Password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect Email or Password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     accessTokenExpire = timedelta(minutes=TOKEN_EXPIRATION_TIME_MINUTS)
     accessToken = createAccessToken(
         data={"sub": user.User_id}, expiresDelta=accessTokenExpire

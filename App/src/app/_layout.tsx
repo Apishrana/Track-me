@@ -19,6 +19,7 @@ export default function TabLayout() {
             // await SecureStore.setItemAsync("access_token", '');
             try {
                 const token = await SecureStore.getItemAsync('access_token');
+                console.log(token);
                 const res = await fetch(`${apiUrl}user/me`, {
                     method: 'GET',
                     headers: {
@@ -27,6 +28,7 @@ export default function TabLayout() {
                     },
                 });
                 if (!res.ok) {
+                    console.log(res);
                     setLogin(false);
                     return;
                 }

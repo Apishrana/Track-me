@@ -1,43 +1,111 @@
 import messaging from '@react-native-firebase/messaging';
 import * as SecureStore from 'expo-secure-store';
+import { useState } from 'react';
+import { StyleSheet } from 'react-native';
 
+import { useTheme } from '@/hooks/use-theme';
+import Button from '../button';
+import { ThemedText } from '../themed-text';
+import { ThemedTextInput } from '../themed-text-input';
+import { ThemedView } from '../themed-view';
 import GoogleLogin from './GoogleButton';
 
-export default function Signup(setLoginMode) {
+export default function Signup({ setLoginMode }) {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+
+    const theme = useTheme();
+
     const signup = async () => {
         try {
             await messaging().requestPermission();
             await messaging().registerDeviceForRemoteMessages();
 
             const fcmToken = await messaging().getToken();
-            const userData = {
-                Email: email,
-                Password: password,
-                Name: name,
-                Fcm_token: fcmToken,
-            };
+
             const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
-            const res = await fetch(`${apiUrl}/auth/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
+            const res = await fetch(
+                `${apiUrl}/auth/signup?Email=${email}&Password=${password}&Fcm_token=${fcmToken}&Name=${name}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 },
-                body: JSON.stringify(userData),
-            });
+            );
             if (!res.ok) {
                 throw new Error(`HTTP error! Status: ${res.status}, ${res}`);
             }
             const response = await res.json();
-            token = response.access_token;
+            const token = response.access_token;
+            console.log(token);
             await SecureStore.setItemAsync('access_token', token);
         } catch (e) {
-            console.error(e);
+            console.log(e);
         }
     };
+    const loginButton = () => {
+        setLoginMode('L');
+    };
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: 'center',
+            padding: 20,
+        },
+        title: {
+            fontSize: 32,
+            fontWeight: 'bold',
+            marginBottom: 10,
+            height: 32,
+        },
+        input: {
+            borderWidth: 1,
+            borderColor: '#ccc',
+            borderRadius: 8,
+            padding: 12,
+            marginBottom: 15,
+        },
+        loginText: {
+            textAlign: 'center',
+        },
+        link: {
+            color: theme.link,
+        },
+    });
+
     return (
-        <>
-            
+        <ThemedView style={styles.container}>
+            <ThemedText style={styles.title}>Signup</ThemedText>
+            <ThemedTextInput
+                style={styles.input}
+                placeholder="Name"
+                value={name}
+                onChangeText={setName}
+            />
+            <ThemedTextInput
+                style={styles.input}
+                placeholder="Email"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                value={email}
+                onChangeText={setEmail}
+            />
+            <ThemedTextInput
+                style={styles.input}
+                placeholder="Password"
+                secureTextEntry
+                value={password}
+                onChangeText={setPassword}
+            />
             <GoogleLogin />
-        </>
+            <Button children={'Sign Up'} onPress={signup} />
+            <ThemedText style={styles.loginText} onPress={loginButton}>
+                Existing user?
+                <ThemedText style={styles.link}> Login</ThemedText>
+            </ThemedText>
+        </ThemedView>
     );
 }

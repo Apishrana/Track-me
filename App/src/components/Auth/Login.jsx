@@ -3,15 +3,18 @@ import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
+import { useTheme } from '@/hooks/use-theme';
 import Button from '../button';
 import { ThemedText } from '../themed-text';
 import { ThemedTextInput } from '../themed-text-input';
 import { ThemedView } from '../themed-view';
 import GoogleLogin from './GoogleButton';
 
-export default function Login(setLoginMode) {
+export default function Login({ setLoginMode }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const theme = useTheme();
 
     const login = async () => {
         try {
@@ -41,6 +44,9 @@ export default function Login(setLoginMode) {
             console.log(e);
         }
     };
+    const signupButton = () => {
+        setLoginMode('S');
+    };
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -50,7 +56,8 @@ export default function Login(setLoginMode) {
         title: {
             fontSize: 32,
             fontWeight: 'bold',
-            marginBottom: 30,
+            marginBottom: 10,
+            height: 32,
         },
         input: {
             borderWidth: 1,
@@ -58,6 +65,10 @@ export default function Login(setLoginMode) {
             borderRadius: 8,
             padding: 12,
             marginBottom: 15,
+        },
+        signupText: { textAlign: 'center' },
+        link: {
+            color: theme.link,
         },
     });
     return (
@@ -79,8 +90,11 @@ export default function Login(setLoginMode) {
                 value={password}
                 onChangeText={setPassword}
             />
-            <Button children={'Login'} onPress={login} />
             <GoogleLogin />
+            <Button children={'Login'} onPress={login} />
+            <ThemedText style={styles.signupText} onPress={signupButton}>
+                No account? <ThemedText style={styles.link}>Sign Up</ThemedText>
+            </ThemedText>
         </ThemedView>
     );
 }
