@@ -10,14 +10,17 @@ import { ThemedTextInput } from '../themed-text-input';
 import { ThemedView } from '../themed-view';
 import GoogleLogin from './GoogleButton';
 
-export default function Signup({ setLoginMode }) {
+export default function Signup({ setLoginMode, loadUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
 
+    const [btnPressed, setBtnPressed] = useState(false);
+
     const theme = useTheme();
 
     const signup = async () => {
+        setBtnPressed(true);
         try {
             await messaging().requestPermission();
             await messaging().registerDeviceForRemoteMessages();
@@ -39,13 +42,13 @@ export default function Signup({ setLoginMode }) {
             }
             const response = await res.json();
             const token = response.access_token;
-            console.log(1);
             console.log(token);
             await SecureStore.setItemAsync('access_token', token);
-            console.log(2);
-            console.log(await SecureStore.getItemAsync('access_token'));
+            loadUser();
         } catch (e) {
             console.log(e);
+        } finally {
+            setBtnPressed(false);
         }
     };
     const loginButton = () => {
@@ -104,7 +107,9 @@ export default function Signup({ setLoginMode }) {
                 onChangeText={setPassword}
             />
             <GoogleLogin />
-            <Button children={'Sign Up'} onPress={signup} />
+            <Button onPress={signup} disabled={btnPressed}>
+                Sign Up
+            </Button>
             <ThemedText style={styles.loginText} onPress={loginButton}>
                 Existing user?
                 <ThemedText style={styles.link}> Login</ThemedText>

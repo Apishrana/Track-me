@@ -5,6 +5,7 @@ export default function Button({
     style,
     textStyle,
     onPress,
+    disabled = false,
     ...props
 }) {
     const styles = StyleSheet.create({
@@ -23,7 +24,18 @@ export default function Button({
     });
 
     return (
-        <Pressable onPress={onPress} style={[styles.button, style]} {...props}>
+        <Pressable
+            onPress={onPress}
+            disabled={disabled}
+            style={({ pressed }) => [
+                styles.button,
+                style,
+                (pressed || disabled) && {
+                    opacity: 0.7,
+                    transform: [{ scale: 0.98 }],
+                },
+            ]}
+            {...props}>
             {typeof children === 'string' || typeof children === 'number' ? (
                 <Text style={[styles.buttonText, textStyle]}>{children}</Text>
             ) : (

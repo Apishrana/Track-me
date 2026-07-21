@@ -10,13 +10,16 @@ import { ThemedTextInput } from '../themed-text-input';
 import { ThemedView } from '../themed-view';
 import GoogleLogin from './GoogleButton';
 
-export default function Login({ setLoginMode }) {
+export default function Login({ setLoginMode, loadUser }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const [btnPressed, setBtnPressed] = useState(false);
 
     const theme = useTheme();
 
     const login = async () => {
+        setBtnPressed(true);
         try {
             await messaging().requestPermission();
             await messaging().registerDeviceForRemoteMessages();
@@ -38,13 +41,13 @@ export default function Login({ setLoginMode }) {
             }
             const response = await res.json();
             const token = response.access_token;
-            console.log(1);
             console.log(token);
             await SecureStore.setItemAsync('access_token', token);
-            console.log(2);
-            console.log(await SecureStore.getItemAsync('access_token'));
+            loadUser();
         } catch (e) {
             console.log(e);
+        } finally {
+            setBtnPressed(false);
         }
     };
     const signupButton = () => {
@@ -94,7 +97,9 @@ export default function Login({ setLoginMode }) {
                 onChangeText={setPassword}
             />
             <GoogleLogin />
-            <Button children={'Login'} onPress={login} />
+            <Button onPress={login} disabled={btnPressed}>
+                Login
+            </Button>
             <ThemedText style={styles.signupText} onPress={signupButton}>
                 No account? <ThemedText style={styles.link}>Sign Up</ThemedText>
             </ThemedText>
