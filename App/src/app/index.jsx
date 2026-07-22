@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native';
 
+import Hero from '@/components/Home/hero';
 import Navbar from '@/components/Home/navbar';
-import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useState } from 'react';
 
-export default function HomeScreen() {
+export default function HomeScreen({ user }) {
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
     return (
         <ThemedView style={styles.container}>
@@ -13,7 +13,7 @@ export default function HomeScreen() {
                 hamburgerOpen={hamburgerOpen}
                 setHamburgerOpen={setHamburgerOpen}
             />
-            <ThemedText>abc</ThemedText>
+            <Hero user={user} />
         </ThemedView>
     );
 }

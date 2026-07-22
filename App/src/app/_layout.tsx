@@ -23,6 +23,9 @@ SplashScreen.preventAutoHideAsync();
 export default function TabLayout() {
     const [login, setLogin] = useState(false);
     const [loading, setLoading] = useState(true);
+
+    const [user, setUser] = useState({});
+
     const [fontsLoaded] = useFonts({
         InstrumentSans_400Regular,
         InstrumentSans_500Medium,
@@ -51,7 +54,7 @@ export default function TabLayout() {
                 return;
             }
             const user = await res.json();
-            console.log(user);
+            setUser(user);
             setLogin(true);
             setLoading(false);
         } catch (e) {
@@ -87,7 +90,7 @@ export default function TabLayout() {
                     <UserLoading />
                 ) : login ? (
                     // <AppTabs />
-                    <HomeScreen />
+                    <HomeScreen user={user} />
                 ) : (
                     <LoginPage loadUser={loadUser} />
                 )}
