@@ -1,20 +1,23 @@
-import { StyleSheet } from 'react-native';
-
-import Hero from '@/components/Home/hero';
-import Navbar from '@/components/Home/navbar';
-import { ThemedView } from '@/components/themed-view';
+import HomeScreen from '@/components/Home/homeScreen';
+import UserLoading from '@/components/Loading/UserLoading';
+import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from 'react';
+import LoginPage from './login';
 
-export default function HomeScreen({ user }) {
-    const [hamburgerOpen, setHamburgerOpen] = useState(false);
+export default function Home() {
+    const [login, setLogin] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    const [groups, setGroups] = useState([]);
+    const [user, setUser] = useState({});
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
-    useEffect(() => {
-        const token = user.auth;
-        const getGroup = async () => {
-            const res = await fetch(`${apiUrl}user/groups/joined`, {
+    const loadUser = async () => {
+        setLoading(true);
+
+        try {
+            const token = await SecureStore.getItemAsync('access_token');
+            // console.log(token);
+            const res = await fetch(`${apiUrl}user/me`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -23,26 +26,37 @@ export default function HomeScreen({ user }) {
             });
             if (!res.ok) {
                 console.log(res);
+                setLogin(false);
+                setLoading(false);
                 return;
             }
-            const response = await res.json();
-            setGroups(response.Groups);
+            const user = { ...(await res.json()), auth: token };
+            setUser(user);
+            setLogin(true);
+            setLoading(false);
+        } catch (e) {
+            console.log(e);
+            setLogin(false);
+            setLoading(false);
+        }
+    };
+    useEffect(() => {
+        const logout = async () => {
+            await SecureStore.setItemAsync('access_token', '');
+            console.warn('Logout');
         };
-        getGroup();
+        // logout();
+        loadUser();
     }, []);
-
     return (
-        <ThemedView style={styles.container}>
-            <Navbar
-                hamburgerOpen={hamburgerOpen}
-                setHamburgerOpen={setHamburgerOpen}
-            />
-            <Hero user={user} groups={groups} />
-        </ThemedView>
+        <>
+            {loading ? (
+                <UserLoading />
+            ) : login ? (
+                <HomeScreen user={user} />
+            ) : (
+                <LoginPage loadUser={loadUser} />
+            )}
+        </>
     );
 }
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-});

@@ -1,4 +1,6 @@
-import { Image, ScrollView, StyleSheet } from 'react-native';
+import { useTheme } from '@/hooks/use-theme';
+import { router } from 'expo-router';
+import { Image, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
 
@@ -52,7 +54,7 @@ export default function Hero({ user, groups }) {
     );
 }
 function GroupTemplate({ group }) {
-    // console.log(group);
+    const theme = useTheme();
     const styles = StyleSheet.create({
         container: {
             height: 70,
@@ -60,6 +62,7 @@ function GroupTemplate({ group }) {
             flexDirection: 'row',
             alignItems: 'center',
             borderWidth: 1,
+            borderColor: theme.borderColor,
         },
         imageContainer: {
             height: 70,
@@ -92,7 +95,9 @@ function GroupTemplate({ group }) {
         },
     });
     return (
-        <ThemedView style={styles.container}>
+        <Pressable
+            style={styles.container}
+            onPress={() => router.push(`/group/${group.Group_id}`)}>
             <ThemedView style={styles.imageContainer}>
                 <Image style={styles.image}></Image>
             </ThemedView>
@@ -104,6 +109,6 @@ function GroupTemplate({ group }) {
                     {group.Users.join(' ,')}
                 </ThemedText>
             </ThemedView>
-        </ThemedView>
+        </Pressable>
     );
 }
