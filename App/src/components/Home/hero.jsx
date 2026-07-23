@@ -52,7 +52,7 @@ export default function Hero({ user, groups }) {
     );
 }
 function GroupTemplate({ group }) {
-    console.log(group);
+    // console.log(group);
     const styles = StyleSheet.create({
         container: {
             height: 70,
@@ -77,11 +77,19 @@ function GroupTemplate({ group }) {
             backgroundColor: '#f00',
         },
         infoContainer: {
+            justifyContent: 'center',
             flex: 1,
             height: 70,
             backgroundColor: '#ffffff00',
         },
-        groupName: {},
+        groupName: {
+            fontFamily: 'InstrumentSans_400Regular',
+            fontSize: 22,
+        },
+        userName: {
+            fontFamily: 'InstrumentSans_400Regular',
+            fontSize: 20,
+        },
     });
     return (
         <ThemedView style={styles.container}>
@@ -89,8 +97,12 @@ function GroupTemplate({ group }) {
                 <Image style={styles.image}></Image>
             </ThemedView>
             <ThemedView style={styles.infoContainer}>
-                <ThemedText>{group.Group_name}</ThemedText>
-                {/* <ThemedText>{group}</ThemedText> */}
+                <ThemedText style={styles.groupName}>
+                    {group.Group_name}
+                </ThemedText>
+                <ThemedText style={styles.userName}>
+                    {group.Users.join(' ,')}
+                </ThemedText>
             </ThemedView>
         </ThemedView>
     );
