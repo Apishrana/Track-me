@@ -8,7 +8,7 @@ from Models.user import (
     UpdateEmailModel,
     UpdatePasswordModel,
 )
-from Dependencies.auth import getCurrentUser, hashPass, verifyPass
+from Dependencies.auth import getCurrentUser, getUser, hashPass, verifyPass
 from Dependencies.user import updateUserData
 
 router = APIRouter(
@@ -29,6 +29,10 @@ async def groups_joined(currUser: User = Depends(getCurrentUser)):
     returnData = []
     for i in joinedGroups:
         grp: GroupDB = await getGroup(i)
+        u = []
+        for i in grp.Users:
+            u.append(getUser(i))
+        grp.Users = u
         returnData.append(grp)
     return {"Groups": returnData}
 

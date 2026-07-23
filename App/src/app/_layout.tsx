@@ -39,7 +39,7 @@ export default function TabLayout() {
 
         try {
             const token = await SecureStore.getItemAsync('access_token');
-            console.log(token);
+            // console.log(token);
             const res = await fetch(`${apiUrl}user/me`, {
                 method: 'GET',
                 headers: {
@@ -53,7 +53,7 @@ export default function TabLayout() {
                 setLoading(false);
                 return;
             }
-            const user = await res.json();
+            const user = { ...(await res.json()), auth: token };
             setUser(user);
             setLogin(true);
             setLoading(false);
