@@ -19,6 +19,7 @@ export default function Hero({ user, groups }) {
             fontSize: 35,
             height: 32,
             fontFamily: 'InstrumentSans_500Medium',
+            marginBottom: 5,
         },
         greeting: {
             height: 175,

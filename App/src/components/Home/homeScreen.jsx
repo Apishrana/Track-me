@@ -4,6 +4,7 @@ import { StyleSheet } from 'react-native';
 import { ThemedView } from '../themed-view';
 import Hero from './hero';
 import Navbar from './navbar';
+import Sidebar from './sidebar';
 
 export default function HomeScreen({ user }) {
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
@@ -37,7 +38,11 @@ export default function HomeScreen({ user }) {
                 hamburgerOpen={hamburgerOpen}
                 setHamburgerOpen={setHamburgerOpen}
             />
-            <Hero user={user} groups={groups} />
+            <ThemedView style={styles.container}>
+                <Hero user={user} groups={groups} />
+                {/* {hamburgerOpen ? <Sidebar /> : <></>} */}
+                <Sidebar isOpen={hamburgerOpen} user={user} groups={groups} />
+            </ThemedView>
         </ThemedView>
     );
 }
