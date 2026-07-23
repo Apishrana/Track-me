@@ -31,7 +31,8 @@ async def groups_joined(currUser: User = Depends(getCurrentUser)):
         grp: GroupDB = await getGroup(i)
         u = []
         for i in grp.Users:
-            u.append(getUser(i).Name)
+            usr = getUser(i)
+            u.append(usr.Name)
         grp.Users = u
         returnData.append(grp)
     return {"Groups": returnData}
