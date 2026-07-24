@@ -28,6 +28,7 @@ export default function Sidebar({ isOpen, user, groups }) {
             borderRightWidth: 1,
             borderBottomWidth: 1,
             borderColor: theme.borderColor,
+            boxShadow: '4px 0px 8px rgba(0,0,0,0.25)',
         },
         settingContainer: {
             height: 50,
