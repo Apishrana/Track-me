@@ -145,7 +145,9 @@ function GroupTab({ theme, groups }) {
             borderColor: theme.borderColorLight,
             zIndex: 10,
             backgroundColor: theme.background,
-            // elevation: 10,
+            flex: 0,
+            flexDirection: 'row',
+            alignItems: 'center',
         },
         animatedGroups: {
             flex: 1,
@@ -158,6 +160,34 @@ function GroupTab({ theme, groups }) {
             flex: 1,
             marginLeft: 30,
         },
+        icon: {
+            width: 70,
+            height: 50,
+            backgroundColor: '#00000000',
+        },
+        groupsText: {
+            fontFamily: 'InstrumentSans_500Medium',
+            fontSize: 20,
+        },
+        arrowIconContainer: {
+            backgroundColor: '#00000000',
+            height: 50,
+            flex: 1,
+            flexDirection: 'row-reverse',
+        },
+        arrowIcon: {
+            backgroundColor: '#00000000',
+            height: 50,
+            width: 24,
+            marginRight: 11,
+            flex: 0,
+            justifyContent: 'center',
+        },
+        arrowIconImage: {
+            backgroundColor: '#000000',
+            width: 24,
+            height: 24,
+        },
     });
 
     return (
@@ -166,7 +196,15 @@ function GroupTab({ theme, groups }) {
                 style={styles.headingContainer}
                 onPress={() => {
                     setTabOpen((current) => !current);
-                }}></Pressable>
+                }}>
+                <ThemedView style={styles.icon}></ThemedView>
+                <ThemedText style={styles.groupsText}>Groups</ThemedText>
+                <ThemedView style={styles.arrowIconContainer}>
+                    <ThemedView style={styles.arrowIcon}>
+                        <Image style={styles.arrowIconImage}></Image>
+                    </ThemedView>
+                </ThemedView>
+            </Pressable>
 
             <Animated.View
                 style={[
