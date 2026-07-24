@@ -48,6 +48,8 @@ export default function Navbar({ hamburgerOpen, setHamburgerOpen }) {
             height: 50,
             borderBottomWidth: 1,
             borderColor: theme.borderColorLight,
+            zIndex: 10,
+            backgroundColor: theme.background,
         },
         menuButton: {
             position: 'absolute',

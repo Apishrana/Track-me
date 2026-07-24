@@ -78,6 +78,8 @@ function GroupTemplate({ group }) {
             height: 50,
             width: 50,
             borderRadius: 25,
+            borderWidth: 1,
+            borderColor: theme.borderColor,
             backgroundColor: '#f00',
         },
         infoContainer: {
