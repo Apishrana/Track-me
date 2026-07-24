@@ -25,7 +25,6 @@ export default function Sidebar({ isOpen, user, groups }) {
         },
         container: {
             flex: 1,
-            // backgroundColor: '#00f',
             borderRightWidth: 1,
             borderBottomWidth: 1,
             borderColor: theme.borderColor,
@@ -75,7 +74,6 @@ export default function Sidebar({ isOpen, user, groups }) {
             height: 45,
             width: 45,
             borderRadius: 23,
-            backgroundColor: '#ff3dfc',
         },
     });
 
@@ -184,7 +182,7 @@ function GroupTab({ theme, groups }) {
             justifyContent: 'center',
         },
         arrowIconImage: {
-            backgroundColor: '#000000',
+            backgroundColor: '#00000000',
             width: 24,
             height: 24,
         },
