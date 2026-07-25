@@ -17,6 +17,7 @@ export const Colors = {
         link: '#0000EE',
         borderColor: '#000000',
         borderColorLight: '#0000007f',
+        shadow: 'rgba(0, 0, 0, 0.25)',
     },
     dark: {
         text: '#ffffff',
@@ -27,6 +28,7 @@ export const Colors = {
         link: '#58a6ff',
         borderColor: '#ffffff',
         borderColorLight: '#ffffff7f',
+        shadow: 'rgba(255, 255, 255, 0.25)',
     },
 } as const;
 

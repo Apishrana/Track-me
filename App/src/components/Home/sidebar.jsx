@@ -1,9 +1,15 @@
+import arrowIcon from '@/assets/project images/arrow.png';
+import groupIcon from '@/assets/project images/group.png';
+import settingIcon from '@/assets/project images/setting.png';
 import { useTheme } from '@/hooks/use-theme';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
+
+const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 export default function Sidebar({ isOpen, user, groups }) {
     const translateX = useRef(new Animated.Value(-300)).current;
@@ -28,7 +34,7 @@ export default function Sidebar({ isOpen, user, groups }) {
             borderRightWidth: 1,
             borderBottomWidth: 1,
             borderColor: theme.borderColor,
-            boxShadow: '4px 0px 8px rgba(0,0,0,0.25)',
+            boxShadow: `4px 0px 8px ${theme.shadow}`,
         },
         settingContainer: {
             height: 50,
@@ -76,6 +82,10 @@ export default function Sidebar({ isOpen, user, groups }) {
             width: 45,
             borderRadius: 23,
         },
+        settingIcon: {
+            height: 35,
+            width: 35,
+        },
     });
 
     return (
@@ -89,7 +99,13 @@ export default function Sidebar({ isOpen, user, groups }) {
             <ThemedView style={styles.container}>
                 <GroupTab theme={theme} groups={groups} />
                 <ThemedView style={styles.settingContainer}>
-                    <ThemedView style={styles.iconContainer}></ThemedView>
+                    <ThemedView
+                        style={[styles.iconContainer, { marginRight: 5 }]}>
+                        <Image
+                            source={settingIcon}
+                            style={styles.settingIcon}
+                        />
+                    </ThemedView>
                     <ThemedText style={styles.settingText}>Settings</ThemedText>
                 </ThemedView>
                 <ThemedView style={styles.userContainer}>
@@ -112,11 +128,17 @@ function GroupTab({ theme, groups }) {
     const [tabOpen, setTabOpen] = useState(false);
     const [groupsVisible, setGroupsVisible] = useState(false);
     const openAnimation = useRef(new Animated.Value(0)).current;
+    const arrowRotation = useRef(new Animated.Value(0)).current;
 
     useEffect(() => {
         if (tabOpen) {
             setGroupsVisible(true);
             Animated.timing(openAnimation, {
+                toValue: 1,
+                duration: 300,
+                useNativeDriver: true,
+            }).start();
+            Animated.timing(arrowRotation, {
                 toValue: 1,
                 duration: 300,
                 useNativeDriver: true,
@@ -131,8 +153,13 @@ function GroupTab({ theme, groups }) {
                     setGroupsVisible(false);
                 }
             });
+            Animated.timing(arrowRotation, {
+                toValue: 0,
+                duration: 180,
+                useNativeDriver: true,
+            }).start();
         }
-    }, [tabOpen, openAnimation]);
+    }, [tabOpen, openAnimation, arrowRotation]);
 
     const styles = StyleSheet.create({
         container: {
@@ -163,6 +190,9 @@ function GroupTab({ theme, groups }) {
             width: 70,
             height: 50,
             backgroundColor: '#00000000',
+            flex: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         groupsText: {
             fontFamily: 'InstrumentSans_500Medium',
@@ -196,11 +226,35 @@ function GroupTab({ theme, groups }) {
                 onPress={() => {
                     setTabOpen((current) => !current);
                 }}>
-                <ThemedView style={styles.icon}></ThemedView>
+                <ThemedView style={styles.icon}>
+                    <Image
+                        source={groupIcon}
+                        style={{
+                            width: 45,
+                            height: 45,
+                        }}></Image>
+                </ThemedView>
                 <ThemedText style={styles.groupsText}>Groups</ThemedText>
                 <ThemedView style={styles.arrowIconContainer}>
                     <ThemedView style={styles.arrowIcon}>
-                        <Image style={styles.arrowIconImage}></Image>
+                        <AnimatedImage
+                            style={[
+                                styles.arrowIconImage,
+                                {
+                                    transform: [
+                                        {
+                                            rotateZ: arrowRotation.interpolate({
+                                                inputRange: [0, 1],
+                                                outputRange: [
+                                                    '180deg',
+                                                    '90deg',
+                                                ],
+                                            }),
+                                        },
+                                    ],
+                                },
+                            ]}
+                            source={arrowIcon}></AnimatedImage>
                     </ThemedView>
                 </ThemedView>
             </Pressable>
@@ -287,7 +341,7 @@ function GroupTemplate({ group, theme }) {
         <Pressable
             style={styles.container}
             onPress={() => {
-                // router.push(`/group/${group.Group_id}`);
+                router.push(`/group/${group.Group_id}`);
             }}>
             <ThemedView style={styles.imageContainer}>
                 <Image style={styles.image}></Image>
