@@ -10,11 +10,17 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar, useColorScheme } from 'react-native';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import UserLoading from '@/components/Loading/UserLoading';
 import { ThemedSafeAreaView } from '@/components/themed-safe-area-view';
+import { LoadingContext } from '@/context/LoadingContext';
 import { Stack } from 'expo-router';
+import { useState } from 'react';
+
 SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
+    const [loading, setLoading] = useState(true);
+
     const colorScheme = useColorScheme();
     const [fontsLoaded] = useFonts({
         InstrumentSans_400Regular,
@@ -36,9 +42,12 @@ export default function TabLayout() {
                 }
                 backgroundColor={colorScheme === 'dark' ? '#000000' : '#ffffff'}
             />
-            <ThemedSafeAreaView>
-                <Stack screenOptions={{ headerShown: false }} />
-            </ThemedSafeAreaView>
+            <LoadingContext.Provider value={{ loading, setLoading }}>
+                <ThemedSafeAreaView style={{ flex: 1 }}>
+                    <Stack screenOptions={{ headerShown: false }} />
+                </ThemedSafeAreaView>
+                {loading && <UserLoading />}
+            </LoadingContext.Provider>
         </ThemeProvider>
     );
 }

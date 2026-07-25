@@ -98,7 +98,11 @@ export default function Sidebar({ isOpen, user, groups }) {
             ]}>
             <ThemedView style={styles.container}>
                 <GroupTab theme={theme} groups={groups} />
-                <ThemedView style={styles.settingContainer}>
+                <Pressable
+                    style={styles.settingContainer}
+                    onPress={() => {
+                        router.push(`/setting`);
+                    }}>
                     <ThemedView
                         style={[styles.iconContainer, { marginRight: 5 }]}>
                         <Image
@@ -107,7 +111,7 @@ export default function Sidebar({ isOpen, user, groups }) {
                         />
                     </ThemedView>
                     <ThemedText style={styles.settingText}>Settings</ThemedText>
-                </ThemedView>
+                </Pressable>
                 <ThemedView style={styles.userContainer}>
                     <ThemedView
                         style={[

@@ -1,12 +1,12 @@
 import HomeScreen from '@/components/Home/homeScreen';
-import UserLoading from '@/components/Loading/UserLoading';
+import { useLoading } from '@/context/LoadingContext';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from 'react';
 import LoginPage from './login';
 
 export default function Home() {
+    const { setLoading } = useLoading();
     const [login, setLogin] = useState(false);
-    const [loading, setLoading] = useState(true);
 
     const [user, setUser] = useState({});
 
@@ -50,9 +50,7 @@ export default function Home() {
     }, []);
     return (
         <>
-            {loading ? (
-                <UserLoading />
-            ) : login ? (
+            {login ? (
                 <HomeScreen user={user} />
             ) : (
                 <LoginPage loadUser={loadUser} />
