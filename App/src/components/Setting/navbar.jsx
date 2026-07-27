@@ -1,28 +1,27 @@
-import backarrow from '@/assets/project images/backarrow.png';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
-import { Image, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 
-export default function Navbar() {
+export default function Navbar({ backUrl }) {
     const theme = useTheme();
     const styles = StyleSheet.create({
         container: {
             flex: 0,
             flexDirection: 'row',
-            justifyContent: 'center',
             position: 'relative',
             alignItems: 'center',
-            height: 50,
+            gap: 20,
+            height: 60,
             borderBottomWidth: 1,
             borderColor: theme.borderColorLight,
             zIndex: 10,
             backgroundColor: theme.background,
         },
         backButton: {
-            position: 'absolute',
-            left: 16,
+            marginLeft: 16,
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
@@ -35,7 +34,8 @@ export default function Navbar() {
         },
         title: {
             fontSize: 32,
-            fontFamily: 'InstrumentSans_500Medium',
+            lineHeight: 38,
+            fontFamily: 'InstrumentSans_600SemiBold',
         },
     });
 
@@ -43,11 +43,14 @@ export default function Navbar() {
         <ThemedView style={styles.container}>
             <Pressable
                 style={styles.backButton}
-                onPress={() => router.push('/')}>
-                <Image source={backarrow} style={styles.backButtonImage} />
+                onPress={() => router.push(backUrl)}>
+                <Ionicons
+                    name="arrow-back-outline"
+                    size={32}
+                    color={theme.text}
+                />
             </Pressable>
-
-            <ThemedText style={styles.title}>Locate me</ThemedText>
+            <ThemedText style={styles.title}>Settings</ThemedText>
         </ThemedView>
     );
 }

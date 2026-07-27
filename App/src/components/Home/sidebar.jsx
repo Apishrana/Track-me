@@ -1,15 +1,14 @@
-import arrowIcon from '@/assets/project images/arrow.png';
-import groupIcon from '@/assets/project images/group.png';
-import settingIcon from '@/assets/project images/setting.png';
 import { useTheme } from '@/hooks/use-theme';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Feather from '@expo/vector-icons/Feather';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet } from 'react-native';
+
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
-
-const AnimatedImage = Animated.createAnimatedComponent(Image);
 
 export default function Sidebar({ isOpen, user, groups }) {
     const translateX = useRef(new Animated.Value(-300)).current;
@@ -105,9 +104,11 @@ export default function Sidebar({ isOpen, user, groups }) {
                     }}>
                     <ThemedView
                         style={[styles.iconContainer, { marginRight: 5 }]}>
-                        <Image
-                            source={settingIcon}
+                        <Feather
+                            name="settings"
+                            size={35}
                             style={styles.settingIcon}
+                            color={theme.text}
                         />
                     </ThemedView>
                     <ThemedText style={styles.settingText}>Settings</ThemedText>
@@ -231,17 +232,20 @@ function GroupTab({ theme, groups }) {
                     setTabOpen((current) => !current);
                 }}>
                 <ThemedView style={styles.icon}>
-                    <Image
-                        source={groupIcon}
+                    <FontAwesome
+                        name="group"
                         style={{
-                            width: 45,
-                            height: 45,
-                        }}></Image>
+                            width: 35,
+                            height: 35,
+                        }}
+                        size={35}
+                        color={theme.text}
+                    />
                 </ThemedView>
                 <ThemedText style={styles.groupsText}>Groups</ThemedText>
                 <ThemedView style={styles.arrowIconContainer}>
                     <ThemedView style={styles.arrowIcon}>
-                        <AnimatedImage
+                        <Animated.View
                             style={[
                                 styles.arrowIconImage,
                                 {
@@ -249,16 +253,14 @@ function GroupTab({ theme, groups }) {
                                         {
                                             rotateZ: arrowRotation.interpolate({
                                                 inputRange: [0, 1],
-                                                outputRange: [
-                                                    '180deg',
-                                                    '90deg',
-                                                ],
+                                                outputRange: ['0deg', '-90deg'],
                                             }),
                                         },
                                     ],
                                 },
-                            ]}
-                            source={arrowIcon}></AnimatedImage>
+                            ]}>
+                            <AntDesign name="left" size={24} color="#000000" />
+                        </Animated.View>
                     </ThemedView>
                 </ThemedView>
             </Pressable>

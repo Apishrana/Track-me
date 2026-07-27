@@ -7,9 +7,15 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function LocationScreen() {
-    const [location, setLocation] = useState(null);
+    const [location, setLocation] = useState({
+        longitude: null,
+        latitude: null,
+        accuracy: null,
+    });
     const [error, setError] = useState(null);
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
+
+    const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
 
     useEffect(() => {
         (async () => {
@@ -25,7 +31,11 @@ export default function LocationScreen() {
                 accuracy: Location.Accuracy.High,
             });
 
-            setLocation(currentLocation);
+            setLocation({
+                longitude: currentLocation.coords.longitude,
+                latitude: currentLocation.coords.latitude,
+                accuracy: currentLocation.coords.accuracy,
+            });
         })();
     }, []);
 
