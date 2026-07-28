@@ -32,7 +32,7 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
         },
         closeArea: {
             width: '33%',
-            backgroundColor: '#00000070',
+            backgroundColor: '#00000000',
         },
         container: {
             width: '66%',
