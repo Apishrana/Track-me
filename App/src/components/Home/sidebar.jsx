@@ -259,7 +259,11 @@ function GroupTab({ theme, groups }) {
                                     ],
                                 },
                             ]}>
-                            <AntDesign name="left" size={24} color="#000000" />
+                            <AntDesign
+                                name="left"
+                                size={24}
+                                color={theme.text}
+                            />
                         </Animated.View>
                     </ThemedView>
                 </ThemedView>

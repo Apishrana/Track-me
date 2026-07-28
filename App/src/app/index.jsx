@@ -27,25 +27,19 @@ export default function Home() {
             if (!res.ok) {
                 console.log(res);
                 setLogin(false);
-                setLoading(false);
                 return;
             }
             const user = { ...(await res.json()), auth: token };
             setUser(user);
             setLogin(true);
-            setLoading(false);
         } catch (e) {
             console.log(e);
             setLogin(false);
+        } finally {
             setLoading(false);
         }
     };
     useEffect(() => {
-        const logout = async () => {
-            await SecureStore.setItemAsync('access_token', '');
-            console.warn('Logout');
-        };
-        // logout();
         loadUser();
     }, []);
     return (

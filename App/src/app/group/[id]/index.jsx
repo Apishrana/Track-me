@@ -1,21 +1,26 @@
 import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function LocationScreen() {
+    const mapRef = useRef(null);
     const [location, setLocation] = useState({
         longitude: null,
         latitude: null,
         accuracy: null,
     });
     const [error, setError] = useState(null);
+    const [zoom, setZoom] = useState(17);
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
-
-    const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+    const markerSize = Math.max(
+        18,
+        Math.min(60, 18 * Math.pow(1.15, zoom - 10)),
+    );
+    const dotSize = markerSize * 0.4;
 
     useEffect(() => {
         (async () => {
@@ -43,54 +48,59 @@ export default function LocationScreen() {
         <ThemedView style={styles.container}>
             {error ? (
                 <ThemedText>{error}</ThemedText>
-            ) : location ? (
+            ) : location.longitude != null ? (
                 <>
                     <Map
+                        ref={mapRef}
                         style={styles.map}
                         // mapStyle="https://tiles.openfreemap.org/styles/liberty"
                         mapStyle={`https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`}
+                        // mapStyle={`https://api.maptiler.com/maps/toner-v2/style.json?key=${MAPTILER_KEY}`}
                         // mapStyle={`https://api.maptiler.com/maps/hybrid-v4/style.json?key=${MAPTILER_KEY}`}
-                    >
+
+                        onRegionIsChanging={async () => {
+                            const z = await mapRef.current?.getZoom();
+                            setZoom(z);
+                        }}>
                         <Camera
                             initialViewState={{
-                                center: [
-                                    location.coords.longitude,
-                                    location.coords.latitude,
-                                ],
+                                center: [location.longitude, location.latitude],
                                 zoom: 17,
                                 // zoom: 10,
                             }}
                         />
                         <Marker
                             id="current-location"
-                            lngLat={[
-                                location.coords.longitude,
-                                location.coords.latitude,
-                            ]}>
+                            lngLat={[location.longitude, location.latitude]}>
                             <View
                                 style={{
-                                    width: 18,
-                                    height: 18,
-                                    borderRadius: 9,
-                                    backgroundColor: 'red',
-                                    borderWidth: 2,
+                                    flex: 0,
+                                    width: markerSize,
+                                    height: markerSize,
+                                    borderRadius: markerSize / 2,
+                                    backgroundColor: '#256aff80',
+                                    borderWidth: 1,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
                                     borderColor: 'white',
-                                }}
-                            />
+                                }}>
+                                <View
+                                    style={{
+                                        width: dotSize,
+                                        height: dotSize,
+                                        borderRadius: dotSize / 2,
+                                        backgroundColor: '#256aff',
+                                    }}
+                                />
+                            </View>
                         </Marker>
                     </Map>
                     <ThemedView>
-                        <ThemedText>
-                            Latitude: {location.coords.latitude}
-                        </ThemedText>
+                        <ThemedText>Latitude: {location.latitude}</ThemedText>
 
-                        <ThemedText>
-                            Longitude: {location.coords.longitude}
-                        </ThemedText>
+                        <ThemedText>Longitude: {location.longitude}</ThemedText>
 
-                        <ThemedText>
-                            Accuracy: {location.coords.accuracy} m
-                        </ThemedText>
+                        <ThemedText>Accuracy: {location.accuracy} m</ThemedText>
                     </ThemedView>
                 </>
             ) : (

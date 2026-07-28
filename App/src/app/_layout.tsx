@@ -19,7 +19,7 @@ import { useState } from 'react';
 SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const colorScheme = useColorScheme();
     const [fontsLoaded] = useFonts({

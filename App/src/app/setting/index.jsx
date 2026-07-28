@@ -1,9 +1,16 @@
-import Navbar from '@/components/Setting/navbar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
+import * as SecureStore from 'expo-secure-store';
 import { Pressable, ScrollView, StyleSheet } from 'react-native';
+
+import Navbar from '@/components/Setting/navbar';
 
 export default function Setting() {
     const theme = useTheme();
@@ -26,14 +33,84 @@ export default function Setting() {
                         tittle={'Profile'}
                         settings={[
                             [
-                                'Update UserName',
+                                'Edit Name',
                                 '/setting/profile/username',
-                                <ThemedText></ThemedText>,
+                                <FontAwesome5
+                                    name="user-edit"
+                                    size={20}
+                                    color={theme.text}
+                                />,
                             ],
-                            // ['Update Password', '/setting/profile/password'],
-                            // ['Update Email', '/setting/profile/email'],
+                            [
+                                'Update Password',
+                                '/setting/profile/password',
+                                <FontAwesome5
+                                    name="user-edit"
+                                    size={20}
+                                    color={theme.text}
+                                />,
+                            ],
+                            [
+                                'Update Email',
+                                '/setting/profile/email',
+                                <MaterialCommunityIcons
+                                    name="email-edit"
+                                    size={26}
+                                    color={theme.text}
+                                />,
+                            ],
                         ]}
                     />
+                    <SettingSection
+                        theme={theme}
+                        tittle={'Customization'}
+                        settings={[
+                            [
+                                'Marker Color',
+                                '/setting/profile/username',
+                                <FontAwesome5
+                                    name="map-marker"
+                                    size={20}
+                                    color={theme.text}
+                                />,
+                            ],
+                            [
+                                'Theme',
+                                '/setting/profile/username',
+                                <MaterialCommunityIcons
+                                    name="theme-light-dark"
+                                    size={24}
+                                    color={theme.text}
+                                />,
+                            ],
+                            [
+                                'Map Style',
+                                '/setting/profile/username',
+                                <FontAwesome
+                                    name="map"
+                                    size={20}
+                                    color={theme.text}
+                                />,
+                            ],
+                        ]}
+                    />
+
+                    <SettingSection
+                        theme={theme}
+                        tittle={'Security'}
+                        settings={[
+                            [
+                                'App Lock',
+                                '/setting/profile/username',
+                                <MaterialIcons
+                                    name="lock"
+                                    size={20}
+                                    color={theme.text}
+                                />,
+                            ],
+                        ]}
+                    />
+                    <Logout theme={theme} />
                 </ThemedView>
             </ScrollView>
         </ThemedView>
@@ -76,18 +153,84 @@ function SettingTemplate({ theme, tittle, url, icon }) {
         container: {
             flex: 0,
             height: 50,
+            flexDirection: 'row',
             backgroundColor: theme.background,
             borderBottomWidth: 1,
             borderBottomColor: theme.borderColorLight,
+        },
+        tittleContainer: {
+            height: 50,
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            backgroundColor: '#00000000',
+        },
+        iconContainer: {
+            height: 50,
+            width: 60,
+            flex: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#00000000',
+        },
+        tittleText: {
+            fontSize: 22,
+            lineHeight: 24,
+            fontFamily: 'InstrumentSans_500Medium',
+        },
+        arrow: {
+            height: 50,
+            width: 60,
+            flex: 0,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#00000000',
         },
     });
     return (
         <Pressable
             style={styles.container}
             onPress={() => {
-                router.push(url);
+                // router.push(url);
             }}>
-            {icon}
+            <ThemedView style={styles.tittleContainer}>
+                <ThemedView style={styles.iconContainer}>{icon}</ThemedView>
+                <ThemedText style={styles.tittleText}>{tittle}</ThemedText>
+            </ThemedView>
+            <ThemedView style={styles.arrow}>
+                <AntDesign name="right" size={20} color={theme.textSecondary} />
+            </ThemedView>
+        </Pressable>
+    );
+}
+
+function Logout({ theme }) {
+    const styles = StyleSheet.create({
+        container: {
+            flex: 0,
+            height: 60,
+            width: '80%',
+            borderWidth: 2,
+            borderColor: theme.borderColor,
+            margin: 'auto',
+            marginTop: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+        },
+        text: {
+            fontSize: 24,
+            lineHeight: 26,
+            fontFamily: 'InstrumentSans_500Medium',
+        },
+    });
+    return (
+        <Pressable
+            style={styles.container}
+            onPress={async () => {
+                await SecureStore.setItemAsync('access_token', '');
+                router.push('/');
+            }}>
+            <ThemedText style={styles.text}>Log Out</ThemedText>
         </Pressable>
     );
 }
