@@ -373,7 +373,7 @@ function GroupTemplate({ group, theme }) {
                     {group.Group_name}
                 </ThemedText>
                 <ThemedText style={styles.userName}>
-                    {group.Users.join(' ,')}
+                    {group.Users.map((e) => e.Name).join(' ,')}
                 </ThemedText>
             </ThemedView>
         </Pressable>
