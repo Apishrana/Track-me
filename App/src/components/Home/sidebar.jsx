@@ -247,7 +247,7 @@ function GroupTab({ theme, groups }) {
                     <FontAwesome
                         name="group"
                         style={{
-                            width: 35,
+                            width: 50,
                             height: 35,
                         }}
                         size={35}
