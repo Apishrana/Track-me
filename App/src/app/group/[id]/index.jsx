@@ -1,5 +1,6 @@
 import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
+import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
@@ -7,6 +8,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 
 export default function LocationScreen() {
+    const { id } = useLocalSearchParams();
     const mapRef = useRef(null);
     const [location, setLocation] = useState({
         longitude: null,
