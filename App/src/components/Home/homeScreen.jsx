@@ -45,7 +45,12 @@ export default function HomeScreen({ user }) {
             <ThemedView style={styles.container}>
                 <Hero user={user} groups={groups} />
                 {/* {hamburgerOpen ? <Sidebar /> : <></>} */}
-                <Sidebar isOpen={hamburgerOpen} user={user} groups={groups} />
+                <Sidebar
+                    isOpen={hamburgerOpen}
+                    user={user}
+                    groups={groups}
+                    setHamburgerOpen={setHamburgerOpen}
+                />
             </ThemedView>
         </ThemedView>
     );

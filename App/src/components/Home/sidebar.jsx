@@ -10,13 +10,13 @@ import { Animated, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
 
-export default function Sidebar({ isOpen, user, groups }) {
+export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
     const translateX = useRef(new Animated.Value(-300)).current;
 
     const theme = useTheme();
     useEffect(() => {
         Animated.timing(translateX, {
-            toValue: isOpen ? 0 : -300,
+            toValue: isOpen ? 0 : -400,
             duration: isOpen ? 300 : 180,
             useNativeDriver: true,
         }).start();
@@ -25,10 +25,17 @@ export default function Sidebar({ isOpen, user, groups }) {
     const styles = StyleSheet.create({
         view: {
             position: 'absolute',
+            flex: 1,
+            flexDirection: 'row',
             height: '100%',
-            width: '66%',
+            width: '100%',
+        },
+        closeArea: {
+            width: '33%',
+            backgroundColor: '#00000070',
         },
         container: {
+            width: '66%',
             flex: 1,
             borderRightWidth: 1,
             borderBottomWidth: 1,
@@ -126,6 +133,11 @@ export default function Sidebar({ isOpen, user, groups }) {
                     <ThemedText style={styles.nameText}>{user.Name}</ThemedText>
                 </ThemedView>
             </ThemedView>
+            <Pressable
+                style={styles.closeArea}
+                onPress={() => {
+                    setHamburgerOpen(false);
+                }}></Pressable>
         </Animated.View>
     );
 }
