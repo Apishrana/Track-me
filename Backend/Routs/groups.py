@@ -16,7 +16,7 @@ async def get_group(group_id: int, currUser: User = Depends(getCurrentUser)):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not a group member"
         )
-    group = getGroup(group_id)
+    group = await getGroup(group_id)
     return group
 
 
@@ -32,7 +32,7 @@ async def cerate_group(
 async def cerate_group(
     formData: GroupInviteModel, currUser: User = Depends(getCurrentUser)
 ):
-    group: Group = getGroup(formData.groupID)
+    group: Group = await getGroup(formData.groupID)
     if group.Created_by != currUser.User_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not the group owner"
