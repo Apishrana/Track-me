@@ -24,8 +24,10 @@ export default function LocationScreen() {
     );
     const dotSize = markerSize * 0.4;
 
+    const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+
     useEffect(() => {
-        (async () => {
+        const loadLocation = async () => {
             const { status } =
                 await Location.requestForegroundPermissionsAsync();
 
@@ -43,7 +45,20 @@ export default function LocationScreen() {
                 latitude: currentLocation.coords.latitude,
                 accuracy: currentLocation.coords.accuracy,
             });
-        })();
+        };
+        const loadGroups = async () => {
+            const res = await fetch(
+                `${apiUrl}/auth/login?Email=${email}&Password=${password}&Fcm_token=${fcmToken}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                },
+            );
+        };
+
+        loadLocation();
     }, []);
 
     return (
