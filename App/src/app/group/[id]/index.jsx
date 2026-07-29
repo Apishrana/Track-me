@@ -1,5 +1,6 @@
 import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
+import * as SecureStore from 'expo-secure-store';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -15,6 +16,7 @@ export default function LocationScreen() {
         latitude: null,
         accuracy: null,
     });
+    const [group, setGroup] = useState(null);
     const [error, setError] = useState(null);
     const [zoom, setZoom] = useState(17);
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
@@ -47,17 +49,23 @@ export default function LocationScreen() {
             });
         };
         const loadGroups = async () => {
-            const res = await fetch(
-                `${apiUrl}/auth/login?Email=${email}&Password=${password}&Fcm_token=${fcmToken}`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+            const token = await SecureStore.getItemAsync('access_token');
+            const res = await fetch(`${apiUrl}groups/get?group_id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
                 },
-            );
+            });
+            if (!res.ok) {
+                console.log(res);
+                return;
+            }
+            const response = await res.json();
+            console.log(response);
+            setGroup({});
         };
-
+        loadGroups();
         loadLocation();
     }, []);
 

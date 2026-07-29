@@ -10,14 +10,14 @@ router = APIRouter(
 )
 
 
-@router.get("/get")
+@router.get("/get", response_model=Group)
 async def get_group(group_id: int, currUser: User = Depends(getCurrentUser)):
     if group_id not in currUser.Groups_joined:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not a group member"
         )
     group = getGroup(group_id)
-    return {"group": group}
+    return group
 
 
 @router.post("/cerate")
