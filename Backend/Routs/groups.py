@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from Dependencies.groups import createGroup, getGroup
 from Models.groups import CreateGroupModel, Group, GroupInviteModel
-from Dependencies.auth import getCurrentUser, getUserFromEmail
+from Dependencies.auth import getCurrentUser, getUser, getUserFromEmail
 from Models.user import User
 
 router = APIRouter(
@@ -17,6 +17,13 @@ async def get_group(group_id: int, currUser: User = Depends(getCurrentUser)):
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not a group member"
         )
     group = await getGroup(group_id)
+
+    u = []
+    for i in group.Users:
+        usr = getUser(i)
+        u.append(usr)
+    group.Users = u
+
     return group
 
 
