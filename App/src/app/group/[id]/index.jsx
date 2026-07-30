@@ -3,8 +3,10 @@ import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import TextTicker from 'react-native-text-ticker';
 
+import Navbar from '@/components/Groups/navbar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
@@ -20,7 +22,7 @@ export default function LocationScreen() {
         accuracy: null,
     });
     const [group, setGroup] = useState(null);
-    const [error, setError] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null);
     const [zoom, setZoom] = useState(17);
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
     const markerSize = Math.max(
@@ -37,7 +39,7 @@ export default function LocationScreen() {
                 await Location.requestForegroundPermissionsAsync();
 
             if (status !== 'granted') {
-                setError('Location permission denied');
+                console.log('No permission');
                 return;
             }
 
@@ -65,8 +67,9 @@ export default function LocationScreen() {
                 return;
             }
             const response = await res.json();
-            // console.log(response);
             setGroup(response);
+            const user = JSON.parse(await SecureStore.getItemAsync('user'));
+            setSelectedUser(user.User_id);
         };
         loadGroups();
         loadLocation();
@@ -76,22 +79,21 @@ export default function LocationScreen() {
             flex: 1,
         },
         map: {
-            height: '70%',
+            height: '60%',
             width: '100%',
         },
         userContainer: {
             flexGrow: 1,
-            borderTopWidth: 1,
-            borderColor: theme.borderColor,
+            gap: 2,
+            backgroundColor: theme.background,
         },
     });
 
     return (
         <ThemedView style={styles.container}>
-            {error ? (
-                <ThemedText>{error}</ThemedText>
-            ) : location.longitude != null && group != null ? (
+            {location.longitude != null && group != null ? (
                 <>
+                    <Navbar />
                     <Map
                         ref={mapRef}
                         style={styles.map}
@@ -138,15 +140,17 @@ export default function LocationScreen() {
                         </Marker>
                     </Map>
                     <ScrollView contentContainerStyle={styles.userContainer}>
-                        <ThemedView>
-                            {group.Users.map((e, key) => (
-                                <UserTemplate
-                                    user={e}
-                                    key={key}
-                                    theme={theme}
-                                />
-                            ))}
-                        </ThemedView>
+                        {group.Users.map((e, key) => (
+                            <UserTemplate
+                                user={e}
+                                key={key}
+                                theme={theme}
+                                selected={e.User_id == selectedUser}
+                                onPress={() => {
+                                    setSelectedUser(e.User_id);
+                                }}
+                            />
+                        ))}
                     </ScrollView>
                 </>
             ) : (
@@ -156,26 +160,30 @@ export default function LocationScreen() {
     );
 }
 
-function UserTemplate({ user, theme }) {
+function UserTemplate({ user, theme, selected, onPress }) {
+    const tickerDuration = Math.max(2500, user.Name.length * 110);
     const styles = StyleSheet.create({
         container: {
-            height: 50,
+            height: 60,
             paddingVertical: 10,
-            borderTopWidth: 0,
-            borderWidth: 1,
-            borderBottomWidth: 1,
-            borderColor: theme.borderColor,
+            borderWidth: selected ? 2 : 1,
+            borderColor: selected ? theme.borderColor : theme.borderColorLight,
             flex: 0,
             flexDirection: 'row',
             alignItems: 'center',
+            paddingRight: 16,
         },
         userIconContainer: {
-            height: 50,
-            width: 50,
+            height: 60,
+            width: 60,
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#ffffff00',
+        },
+        textContainer: {
+            flex: 1,
+            marginLeft: 20,
         },
         userIcon: {
             height: 45,
@@ -187,19 +195,38 @@ function UserTemplate({ user, theme }) {
             marginLeft: 10,
         },
         nameText: {
-            marginLeft: 20,
             fontFamily: 'InstrumentSans_500Medium',
             fontSize: 24,
             lineHeight: 30,
             backgroundColor: '#ffffff00',
+            color: theme.text,
         },
     });
     return (
-        <Pressable style={styles.container}>
+        <Pressable style={styles.container} onPress={onPress}>
             <ThemedView style={styles.userIconContainer}>
                 <Image style={styles.userIcon} />
             </ThemedView>
-            <ThemedText style={styles.nameText}>{user.Name}</ThemedText>
+            <ThemedView style={styles.textContainer}>
+                {selected ? (
+                    <TextTicker
+                        style={styles.nameText}
+                        duration={tickerDuration}
+                        loop
+                        bounce={false}
+                        repeatSpacer={50}
+                        marqueeDelay={1000}>
+                        {user.Name}
+                    </TextTicker>
+                ) : (
+                    <ThemedText
+                        style={styles.nameText}
+                        numberOfLines={1}
+                        ellipsizeMode="tail">
+                        {user.Name}
+                    </ThemedText>
+                )}
+            </ThemedView>
         </Pressable>
     );
 }

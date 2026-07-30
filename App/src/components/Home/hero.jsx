@@ -91,10 +91,12 @@ function GroupTemplate({ group }) {
         groupName: {
             fontFamily: 'InstrumentSans_400Regular',
             fontSize: 22,
+            marginRight: 15,
         },
         userName: {
             fontFamily: 'InstrumentSans_400Regular',
             fontSize: 20,
+            marginRight: 15,
         },
     });
     return (
@@ -105,10 +107,16 @@ function GroupTemplate({ group }) {
                 <Image style={styles.image}></Image>
             </ThemedView>
             <ThemedView style={styles.infoContainer}>
-                <ThemedText style={styles.groupName}>
+                <ThemedText
+                    style={styles.groupName}
+                    numberOfLines={1}
+                    ellipsizeMode={'tail'}>
                     {group.Group_name}
                 </ThemedText>
-                <ThemedText style={styles.userName}>
+                <ThemedText
+                    style={styles.userName}
+                    numberOfLines={1}
+                    ellipsizeMode={'tail'}>
                     {group.Users.map((e) => e.Name).join(' ,')}
                 </ThemedText>
             </ThemedView>

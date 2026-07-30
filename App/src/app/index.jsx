@@ -30,6 +30,7 @@ export default function Home() {
                 return;
             }
             const user = { ...(await res.json()), auth: token };
+            await SecureStore.setItemAsync('user', JSON.stringify(user));
             setUser(user);
             setLogin(true);
         } catch (e) {
