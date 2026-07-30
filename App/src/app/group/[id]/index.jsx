@@ -93,7 +93,7 @@ export default function LocationScreen() {
         <ThemedView style={styles.container}>
             {location.longitude != null && group != null ? (
                 <>
-                    <Navbar />
+                    <Navbar groupName={group.Group_name} />
                     <Map
                         ref={mapRef}
                         style={styles.map}

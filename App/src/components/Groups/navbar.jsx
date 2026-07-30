@@ -1,11 +1,11 @@
-import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet } from 'react-native';
+import TextTicker from 'react-native-text-ticker';
 
-export default function Navbar() {
+export default function Navbar({ groupName }) {
     const theme = useTheme();
     const styles = StyleSheet.create({
         container: {
@@ -36,6 +36,7 @@ export default function Navbar() {
             fontSize: 32,
             lineHeight: 38,
             fontFamily: 'InstrumentSans_600SemiBold',
+            color: theme.text,
         },
     });
 
@@ -50,7 +51,19 @@ export default function Navbar() {
                     color={theme.text}
                 />
             </Pressable>
-            <ThemedText style={styles.title}>Settings</ThemedText>
+            <TextTicker
+                style={styles.title}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                duration={Math.max(4000, groupName.length * 180)}
+                loop
+                bounce={false}
+                repeatSpacer={60}
+                marqueeDelay={1000}
+                shouldAnimate={groupName.length > 15}
+                useNativeDriver>
+                {groupName}
+            </TextTicker>
         </ThemedView>
     );
 }
