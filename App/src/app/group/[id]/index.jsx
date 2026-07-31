@@ -24,11 +24,7 @@ export default function LocationScreen() {
     const theme = useTheme();
     const { id } = useLocalSearchParams();
     const mapRef = useRef(null);
-    const [location, setLocation] = useState({
-        longitude: null,
-        latitude: null,
-        accuracy: null,
-    });
+    const [location, setLocation] = useState(null);
     const [group, setGroup] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [zoom, setZoom] = useState(17);
@@ -97,16 +93,15 @@ export default function LocationScreen() {
                     }
 
                     const locResponse = await locRes.json();
-                    locations[e.User_id] = locResponse;
+                    locations[e.User_id] = locResponse[0];
                 }),
             );
-
             response.Locations = locations;
             const user = JSON.parse(await SecureStore.getItemAsync('user'));
             setSelectedUser(user.User_id);
             setGroup(response);
-            setLocation(response.Location[user.User_id]);
-            console.log(response.Location[user.User_id]);
+            const userLocation = response.Locations?.[user.User_id] ?? null;
+            setLocation(userLocation);
         };
         loadGroups();
         // loadLocation();
@@ -155,7 +150,7 @@ export default function LocationScreen() {
 
     return (
         <ThemedView style={styles.container}>
-            {location.longitude != null && group != null ? (
+            {location != null && group != null ? (
                 <>
                     <Navbar groupName={group.Group_name} />
                     <Map
@@ -172,13 +167,13 @@ export default function LocationScreen() {
                         }}>
                         <Camera
                             initialViewState={{
-                                center: [location.longitude, location.latitude],
+                                center: [location.Longitude, location.Latitude],
                                 zoom: 17,
                             }}
                         />
                         <Marker
                             id="current-location"
-                            lngLat={[location.longitude, location.latitude]}>
+                            lngLat={[location.Longitude, location.Latitude]}>
                             <View
                                 style={{
                                     flex: 0,
@@ -226,12 +221,18 @@ export default function LocationScreen() {
                                     fontFamily: 'InstrumentSans_500Medium',
                                 }}>
                                 Updated:{' '}
-                                {/* {
-                                    group.Users.find(
-                                        (e) => e.User_id == selectedUser,
-                                    ).Name
-                                } */}
-                                30 June 2026, 10:00 AM
+                                {location?.Created_at
+                                    ? new Date(
+                                          location.Created_at,
+                                      ).toLocaleString('en-IN', {
+                                          day: 'numeric',
+                                          month: 'short',
+                                          year: 'numeric',
+                                          hour: 'numeric',
+                                          minute: '2-digit',
+                                          hour12: true,
+                                      })
+                                    : 'Unknown'}
                             </ThemedText>
                         </ThemedView>
                         <Pressable
