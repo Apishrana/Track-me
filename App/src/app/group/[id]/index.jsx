@@ -1,6 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
-import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useRef, useState } from 'react';
@@ -40,26 +39,46 @@ export default function LocationScreen() {
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
 
-    useEffect(() => {
-        const loadLocation = async () => {
-            const { status } =
-                await Location.requestForegroundPermissionsAsync();
-
-            if (status !== 'granted') {
-                console.log('No permission');
-                return;
-            }
-
-            const currentLocation = await Location.getCurrentPositionAsync({
-                accuracy: Location.Accuracy.High,
-            });
-
-            setLocation({
-                longitude: currentLocation.coords.longitude,
-                latitude: currentLocation.coords.latitude,
-                accuracy: currentLocation.coords.accuracy,
-            });
+    const updateUserLocation = async () => {
+        const payload = {
+            Target_id: selectedUser,
+            Group_id: id,
         };
+        const token = await SecureStore.getItemAsync('access_token');
+        const res = await fetch(`${apiUrl}location/request`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+                body: JSON.stringify(payload),
+            },
+        });
+        if (!res.ok) {
+            console.log(res);
+            return;
+        }
+    };
+
+    useEffect(() => {
+        // const loadLocation = async () => {
+        //     const { status } =
+        //         await Location.requestForegroundPermissionsAsync();
+
+        //     if (status !== 'granted') {
+        //         console.log('No permission');
+        //         return;
+        //     }
+
+        //     const currentLocation = await Location.getCurrentPositionAsync({
+        //         accuracy: Location.Accuracy.High,
+        //     });
+
+        //     setLocation({
+        //         longitude: currentLocation.coords.longitude,
+        //         latitude: currentLocation.coords.latitude,
+        //         accuracy: currentLocation.coords.accuracy,
+        //     });
+        // };
         const loadGroups = async () => {
             const token = await SecureStore.getItemAsync('access_token');
             const res = await fetch(`${apiUrl}groups/get?group_id=${id}`, {
@@ -241,6 +260,7 @@ export default function LocationScreen() {
                         <Pressable
                             onPress={() => {
                                 spin();
+                                updateUserLocation();
                             }}>
                             <Animated.View
                                 style={{
