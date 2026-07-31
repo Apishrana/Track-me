@@ -8,7 +8,7 @@ async def getLocation(user_id):
         .select("*")
         .eq("User_id", user_id)
         .order("Created_at", desc=True)
-        .limit(1)
+        .single()
         .execute()
     )
     return request.data
