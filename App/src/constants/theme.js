@@ -30,9 +30,7 @@ export const Colors = {
         borderColorLight: '#ffffff7f',
         shadow: 'rgba(255, 255, 255, 0.25)',
     },
-} as const;
-
-export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
+};
 
 export const Fonts = Platform.select({
     ios: {
@@ -67,7 +65,7 @@ export const Spacing = {
     four: 24,
     five: 32,
     six: 64,
-} as const;
+};
 
 export const BottomTabInset = Platform.select({ ios: 50, android: 80 }) ?? 0;
 export const MaxContentWidth = 800;

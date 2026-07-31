@@ -4,7 +4,14 @@ import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useRef, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import {
+    Animated,
+    Easing,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    View,
+} from 'react-native';
 import TextTicker from 'react-native-text-ticker';
 
 import Navbar from '@/components/Groups/navbar';
@@ -25,6 +32,7 @@ export default function LocationScreen() {
     const [group, setGroup] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [zoom, setZoom] = useState(17);
+    const spinAnimation = useRef(new Animated.Value(0)).current;
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
     const markerSize = Math.max(
         18,
@@ -75,6 +83,19 @@ export default function LocationScreen() {
         loadGroups();
         loadLocation();
     }, []);
+    const spin = () => {
+        spinAnimation.setValue(0);
+        Animated.timing(spinAnimation, {
+            toValue: 1,
+            duration: 700,
+            easing: Easing.bezier(0.17, 0.89, 0.32, 1.28),
+            useNativeDriver: true,
+        }).start();
+    };
+    const spinInterpolation = spinAnimation.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+    });
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -181,12 +202,24 @@ export default function LocationScreen() {
                                 30 June 2026, 10:00 AM
                             </ThemedText>
                         </ThemedView>
-                        <Pressable>
-                            <Ionicons
-                                name="reload"
-                                size={32}
-                                color={theme.text}
-                            />
+                        <Pressable
+                            onPress={() => {
+                                spin();
+                            }}>
+                            <Animated.View
+                                style={{
+                                    width: 32,
+                                    height: 32,
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    transform: [{ rotate: spinInterpolation }],
+                                }}>
+                                <Ionicons
+                                    name="reload"
+                                    size={32}
+                                    color={theme.text}
+                                />
+                            </Animated.View>
                         </Pressable>
                     </ThemedView>
                     <ScrollView contentContainerStyle={styles.userContainer}>

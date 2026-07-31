@@ -1,14 +1,6 @@
 import { createContext, useContext } from 'react';
 
-type LoadingContextType = {
-    loading: boolean;
-
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-export const LoadingContext = createContext<LoadingContextType | undefined>(
-    undefined,
-);
+export const LoadingContext = createContext(undefined);
 
 export function useLoading() {
     const context = useContext(LoadingContext);
