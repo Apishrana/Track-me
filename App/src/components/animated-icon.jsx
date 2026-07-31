@@ -23,11 +23,11 @@ export function AnimatedSplashOverlay() {
             opacity: 1,
         },
         70: {
-            opacity: 0,
+            opacity: 1,
             easing: Easing.elastic(0.7),
         },
         100: {
-            opacity: 0,
+            opacity: 1,
             transform: [{ scale: 1 }],
             easing: Easing.elastic(0.7),
         },
@@ -55,10 +55,9 @@ export function AnimatedSplashOverlay() {
         </Animated.View>
     ) : (
         <View
-            onLayout={() => {
-                SplashScreen.hideAsync().finally(() => {
-                    setAnimate(true);
-                });
+            onLayout={async () => {
+                await SplashScreen.hideAsync();
+                setAnimate(true);
             }}
             style={styles.splashOverlay}>
             {image}

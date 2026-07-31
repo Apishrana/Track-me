@@ -17,12 +17,14 @@ import TextTicker from 'react-native-text-ticker';
 import Navbar from '@/components/Groups/navbar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useLoading } from '@/context/LoadingContext';
 import { useTheme } from '@/hooks/use-theme';
 import { Image } from 'expo-image';
 
 export default function LocationScreen() {
     const theme = useTheme();
     const { id } = useLocalSearchParams();
+    const { setLoading } = useLoading();
     const mapRef = useRef(null);
     const [location, setLocation] = useState(null);
     const [group, setGroup] = useState(null);
@@ -100,9 +102,10 @@ export default function LocationScreen() {
             const user = JSON.parse(await SecureStore.getItemAsync('user'));
             setSelectedUser(user.User_id);
             setGroup(response);
-            const userLocation = response.Locations?.[user.User_id] ?? null;
-            setLocation(userLocation);
+            setLocation(response.Locations?.[user.User_id]);
+            setLoading(false);
         };
+        setLoading(true);
         loadGroups();
         // loadLocation();
     }, []);
@@ -150,7 +153,7 @@ export default function LocationScreen() {
 
     return (
         <ThemedView style={styles.container}>
-            {location != null && group != null ? (
+            {location && group ? (
                 <>
                     <Navbar groupName={group.Group_name} />
                     <Map
@@ -264,13 +267,14 @@ export default function LocationScreen() {
                                 selected={e.User_id == selectedUser}
                                 onPress={() => {
                                     setSelectedUser(e.User_id);
+                                    setLocation(group.Locations?.[e.User_id]);
                                 }}
                             />
                         ))}
                     </ScrollView>
                 </>
             ) : (
-                <ThemedText>Getting location...</ThemedText>
+                <></>
             )}
         </ThemedView>
     );

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useLoading } from '@/context/LoadingContext';
+import * as SecureStore from 'expo-secure-store';
 import { ThemedView } from '../themed-view';
 import Hero from './hero';
 import Navbar from './navbar';
@@ -16,8 +17,9 @@ export default function HomeScreen({ user }) {
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
     useEffect(() => {
         setLoading(true);
-        const token = user.auth;
+
         const getGroup = async () => {
+            const token = await SecureStore.getItemAsync('access_token');
             const res = await fetch(`${apiUrl}user/groups/joined`, {
                 method: 'GET',
                 headers: {
@@ -27,6 +29,7 @@ export default function HomeScreen({ user }) {
             });
             if (!res.ok) {
                 console.log(res);
+                setLoading(false);
                 return;
             }
             const response = await res.json();

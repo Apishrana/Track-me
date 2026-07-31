@@ -1,19 +1,15 @@
 import HomeScreen from '@/components/Home/homeScreen';
-import { useLoading } from '@/context/LoadingContext';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from 'react';
 import LoginPage from './login';
 
 export default function Home() {
-    const { setLoading } = useLoading();
-    const [login, setLogin] = useState(false);
+    const [login, setLogin] = useState(true);
 
     const [user, setUser] = useState({});
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
     const loadUser = async () => {
-        setLoading(true);
-
         try {
             const token = await SecureStore.getItemAsync('access_token');
             // console.log(token);
@@ -29,15 +25,13 @@ export default function Home() {
                 setLogin(false);
                 return;
             }
-            const user = { ...(await res.json()), auth: token };
+            const user = await res.json();
             await SecureStore.setItemAsync('user', JSON.stringify(user));
             setUser(user);
             setLogin(true);
         } catch (e) {
             console.log(e);
             setLogin(false);
-        } finally {
-            setLoading(false);
         }
     };
     useEffect(() => {

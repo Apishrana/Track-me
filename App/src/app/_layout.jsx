@@ -9,17 +9,17 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar, useColorScheme } from 'react-native';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import UserLoading from '@/components/Loading/UserLoading';
 import { ThemedSafeAreaView } from '@/components/themed-safe-area-view';
 import { LoadingContext } from '@/context/LoadingContext';
 import { Stack } from 'expo-router';
 import { useState } from 'react';
+import { AnimatedSplashOverlay } from '@/components/animated-icon';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function TabLayout() {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const colorScheme = useColorScheme();
     const [fontsLoaded] = useFonts({
@@ -35,18 +35,26 @@ export default function TabLayout() {
     return (
         <ThemeProvider
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <AnimatedSplashOverlay />
-            <StatusBar
-                barStyle={
-                    colorScheme === 'dark' ? 'light-content' : 'dark-content'
-                }
-                backgroundColor={colorScheme === 'dark' ? '#000000' : '#ffffff'}
-            />
             <LoadingContext.Provider value={{ loading, setLoading }}>
-                <ThemedSafeAreaView style={{ flex: 1 }}>
-                    <Stack screenOptions={{ headerShown: false }} />
-                </ThemedSafeAreaView>
+                <AnimatedSplashOverlay />
+                <StatusBar
+                    barStyle={
+                        colorScheme === 'dark'
+                            ? 'light-content'
+                            : 'dark-content'
+                    }
+                    backgroundColor={
+                        colorScheme === 'dark' ? '#000000' : '#ffffff'
+                    }
+                />
                 {loading && <UserLoading />}
+                <ThemedSafeAreaView style={{ flex: 1 }}>
+                    <Stack
+                        screenOptions={{
+                            headerShown: false,
+                        }}
+                    />
+                </ThemedSafeAreaView>
             </LoadingContext.Provider>
         </ThemeProvider>
     );
