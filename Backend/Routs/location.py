@@ -4,7 +4,12 @@ from Dependencies.groups import getGroup
 from Models.groups import Group
 from Models.user import User, UserDB
 from Dependencies.auth import getCurrentUser, getUser
-from Dependencies.location import getLocation, sendLocationRequest, uploadLocation
+from Dependencies.location import (
+    getAllLocation,
+    getLocation,
+    sendLocationRequest,
+    uploadLocation,
+)
 from Models.location import RequestLocationModel, UploadLocationModel
 
 router = APIRouter(
@@ -12,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("/get/")
+@router.get("/get")
 async def get_location(
     group_id: int, user_id: int, currUser: User = Depends(getCurrentUser)
 ):
@@ -23,6 +28,20 @@ async def get_location(
             detail="Users not in the same group",
         )
     data = await getLocation(user_id=user_id)
+    return data
+
+
+@router.get("/get/all")
+async def get_all_location(
+    group_id: int, user_id: int, currUser: User = Depends(getCurrentUser)
+):
+    group: Group = await getGroup(group_id)
+    if not (user_id in group.Users and currUser.User_id in group.Users):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Users not in the same group",
+        )
+    data = await getAllLocation(user_id=user_id)
     return data
 
 

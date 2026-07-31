@@ -76,9 +76,37 @@ export default function LocationScreen() {
                 return;
             }
             const response = await res.json();
-            setGroup(response);
+            const locations = {};
+
+            await Promise.all(
+                response.Users.map(async (e) => {
+                    const locRes = await fetch(
+                        `${apiUrl}location/get?group_id=${id}&user_id=${e.User_id}`,
+                        {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${token}`,
+                            },
+                        },
+                    );
+
+                    if (!locRes.ok) {
+                        console.log(locRes);
+                        return;
+                    }
+
+                    const locResponse = await locRes.json();
+                    locations[e.User_id] = locResponse;
+                }),
+            );
+
+            response.Locations = locations;
+            console.log(response.Users);
             const user = JSON.parse(await SecureStore.getItemAsync('user'));
+            console.log(user.User_id);
             setSelectedUser(user.User_id);
+            setGroup(response);
         };
         loadGroups();
         loadLocation();
@@ -146,7 +174,6 @@ export default function LocationScreen() {
                             initialViewState={{
                                 center: [location.longitude, location.latitude],
                                 zoom: 17,
-                                // zoom: 10,
                             }}
                         />
                         <Marker

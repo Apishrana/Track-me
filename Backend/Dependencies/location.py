@@ -8,6 +8,18 @@ async def getLocation(user_id):
         .select("*")
         .eq("User_id", user_id)
         .order("Created_at", desc=True)
+        .limit(1)
+        .execute()
+    )
+    return request.data
+
+
+async def getAllLocation(user_id):
+    request = (
+        supabase.table("Location")
+        .select("*")
+        .eq("User_id", user_id)
+        .order("Created_at", desc=True)
         .execute()
     )
     return request.data
