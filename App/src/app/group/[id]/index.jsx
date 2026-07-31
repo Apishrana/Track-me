@@ -102,14 +102,14 @@ export default function LocationScreen() {
             );
 
             response.Locations = locations;
-            console.log(response.Users);
             const user = JSON.parse(await SecureStore.getItemAsync('user'));
-            console.log(user.User_id);
             setSelectedUser(user.User_id);
             setGroup(response);
+            setLocation(response.Location[user.User_id]);
+            console.log(response.Location[user.User_id]);
         };
         loadGroups();
-        loadLocation();
+        // loadLocation();
     }, []);
     const spin = () => {
         spinAnimation.setValue(0);
