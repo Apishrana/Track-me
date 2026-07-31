@@ -179,7 +179,11 @@ export default function LocationScreen() {
                         <ThemedView style={styles.userNavText}>
                             <ThemedText
                                 numberOfLines={1}
-                                style={{ fontSize: 24, lineHeight: 28 }}>
+                                style={{
+                                    fontSize: 24,
+                                    lineHeight: 28,
+                                    fontFamily: 'InstrumentSans_500Medium',
+                                }}>
                                 Tracking:{' '}
                                 {
                                     group.Users.find(
@@ -192,6 +196,7 @@ export default function LocationScreen() {
                                 style={{
                                     fontSize: 16,
                                     color: theme.textSecondary,
+                                    fontFamily: 'InstrumentSans_500Medium',
                                 }}>
                                 Updated:{' '}
                                 {/* {
