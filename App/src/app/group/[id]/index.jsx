@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
 import * as Location from 'expo-location';
 import { useLocalSearchParams } from 'expo-router';
@@ -87,6 +88,20 @@ export default function LocationScreen() {
             gap: 2,
             backgroundColor: theme.background,
         },
+        userNav: {
+            height: 60,
+            marginBottom: 5,
+            borderColor: theme.borderColor,
+            borderWidth: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: 16,
+        },
+        userNavText: {
+            flex: 0,
+            width: '85%',
+        },
     });
 
     return (
@@ -139,6 +154,41 @@ export default function LocationScreen() {
                             </View>
                         </Marker>
                     </Map>
+                    <ThemedView style={styles.userNav}>
+                        <ThemedView style={styles.userNavText}>
+                            <ThemedText
+                                numberOfLines={1}
+                                style={{ fontSize: 24, lineHeight: 28 }}>
+                                Tracking:{' '}
+                                {
+                                    group.Users.find(
+                                        (e) => e.User_id == selectedUser,
+                                    ).Name
+                                }
+                            </ThemedText>
+                            <ThemedText
+                                numberOfLines={1}
+                                style={{
+                                    fontSize: 16,
+                                    color: theme.textSecondary,
+                                }}>
+                                Updated:{' '}
+                                {/* {
+                                    group.Users.find(
+                                        (e) => e.User_id == selectedUser,
+                                    ).Name
+                                } */}
+                                30 June 2026, 10:00 AM
+                            </ThemedText>
+                        </ThemedView>
+                        <Pressable>
+                            <Ionicons
+                                name="reload"
+                                size={32}
+                                color={theme.text}
+                            />
+                        </Pressable>
+                    </ThemedView>
                     <ScrollView contentContainerStyle={styles.userContainer}>
                         {group.Users.map((e, key) => (
                             <UserTemplate
