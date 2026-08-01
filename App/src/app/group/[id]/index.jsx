@@ -45,7 +45,7 @@ export default function LocationScreen() {
         setLocationLoading(true);
         const payload = {
             Target_id: selectedUser,
-            Group_id: id,
+            Group_id: parseInt(id),
         };
         const token = await SecureStore.getItemAsync('access_token');
         const res = await fetch(`${apiUrl}location/request`, {

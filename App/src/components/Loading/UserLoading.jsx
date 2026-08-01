@@ -1,7 +1,17 @@
 import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function UserLoading() {
+    const [dots, setDots] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setDots((current) => (current + 1) % 4);
+        }, 400);
+
+        return () => clearInterval(interval);
+    }, []);
     const styles = StyleSheet.create({
         image: {
             width: 76,
@@ -14,6 +24,17 @@ export default function UserLoading() {
             justifyContent: 'center',
             zIndex: 1000,
         },
+        loadingTextContainer: {
+            position: 'absolute',
+            width: '100%',
+            height: 70,
+            alignItems: 'center',
+            bottom: 0,
+        },
+        loadingText: {
+            fontSize: 26,
+            color: 'white',
+        },
     });
 
     const image = (
@@ -22,5 +43,15 @@ export default function UserLoading() {
             source={require('@/assets/images/expo-logo.png')}
         />
     );
-    return <View style={styles.splashOverlay}>{image}</View>;
+    return (
+        <View style={styles.splashOverlay}>
+            {image}
+            <View style={styles.loadingTextContainer}>
+                <Text style={styles.loadingText}>
+                    Loading{'.'.repeat(dots)}
+                    {' '.repeat(3 - dots)}
+                </Text>
+            </View>
+        </View>
+    );
 }
