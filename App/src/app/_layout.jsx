@@ -9,16 +9,18 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar, useColorScheme } from 'react-native';
 
+import { AnimatedSplashOverlay } from '@/components/animated-icon';
 import UserLoading from '@/components/Loading/UserLoading';
 import { ThemedSafeAreaView } from '@/components/themed-safe-area-view';
 import { LoadingContext } from '@/context/LoadingContext';
+import uploadLocation from '@/hooks/upload-location';
+import messaging from '@react-native-firebase/messaging';
 import { Stack } from 'expo-router';
-import { useState } from 'react';
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { useEffect, useState } from 'react';
 
 SplashScreen.preventAutoHideAsync();
 
-export default function TabLayout() {
+export default function Layout() {
     const [loading, setLoading] = useState(true);
 
     const colorScheme = useColorScheme();
@@ -28,10 +30,24 @@ export default function TabLayout() {
         InstrumentSans_600SemiBold,
         InstrumentSans_700Bold,
     });
-    if (!fontsLoaded) {
-        return null;
-    }
+    // if (!fontsLoaded) {
+    //     return null;
+    // }
+    useEffect(() => {
+        const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+            console.log('FCM message received:', remoteMessage);
+            console.log('Notification:', remoteMessage.notification);
+            console.log('Data:', remoteMessage.data);
+            if (
+                remoteMessage.data.action.trim().toLowerCase() ==
+                'upload location'
+            ) {
+                uploadLocation(remoteMessage.data.requester);
+            }
+        });
 
+        return unsubscribe;
+    }, []);
     return (
         <ThemeProvider
             value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

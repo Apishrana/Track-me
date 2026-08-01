@@ -16,6 +16,7 @@ class UploadLocationModel(BaseModel):
     Longitude: float
     Latitude: float
     Accuracy: float
+    requester: int
 
 
 class RequestLocationModel(BaseModel):

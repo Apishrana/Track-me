@@ -7,6 +7,7 @@ from Dependencies.auth import getCurrentUser, getUser
 from Dependencies.location import (
     getAllLocation,
     getLocation,
+    sendLocationConfirmation,
     sendLocationRequest,
     uploadLocation,
 )
@@ -56,7 +57,7 @@ async def request_location(
             detail="Users not in the same group",
         )
     target = getUser(formData.Target_id)
-    res = sendLocationRequest(token=target.Fcm_token)
+    res = sendLocationRequest(token=target.Fcm_token, requester=currUser.User_id)
     return {"massage": "Request sent", "message ID": res}
 
 
@@ -64,10 +65,12 @@ async def request_location(
 async def upload_location(
     formData: UploadLocationModel, currUser: User = Depends(getCurrentUser)
 ):
-    cnf = await uploadLocation(
+    await uploadLocation(
         longitude=formData.Longitude,
         latitude=formData.Latitude,
         accuracy=formData.Accuracy,
         userID=currUser.User_id,
     )
+    requester = getUser(formData.requester)
+    cnf = sendLocationConfirmation(token=requester.Fcm_token, location=formData)
     return cnf

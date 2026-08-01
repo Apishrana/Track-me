@@ -60,6 +60,7 @@ export default function LocationScreen() {
             console.log(res);
             return;
         }
+        console.log(await res.json());
     };
 
     useEffect(() => {

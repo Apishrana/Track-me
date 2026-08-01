@@ -35,16 +35,32 @@ async def uploadLocation(longitude, latitude, accuracy, userID):
     }
     res = supabase.table("Location").insert(data).execute()
     print(res.data[0])
-    return res.data[0]
 
 
-def sendLocationRequest(token):
+def sendLocationRequest(token, requester):
     message = messaging.Message(
         token=token,
         notification=messaging.Notification(
             title="Location Requested", body="Tap to open the app."
         ),
-        data={"action": "Upload location"},
+        data={"action": "Upload location", "requester": requester},
+    )
+
+    res = messaging.send(message)
+    return res
+
+
+def sendLocationConfirmation(token, location):
+    message = messaging.Message(
+        token=token,
+        data={
+            "action": "Render location",
+            "location": {
+                "Longitude": location.Longitude,
+                "Latitude": location.Latitude,
+                "Accuracy": location.Accuracy,
+            },
+        },
     )
 
     res = messaging.send(message)
