@@ -55,7 +55,7 @@ async def request_location(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Users not in the same group",
         )
-    target = await getUser(formData.Target_id)
+    target = getUser(formData.Target_id)
     res = await sendLocationRequest(token=target.Fcm_token)
     return {"massage": "Request sent", "message ID": res}
 
