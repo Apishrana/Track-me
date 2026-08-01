@@ -56,7 +56,7 @@ async def request_location(
             detail="Users not in the same group",
         )
     target = getUser(formData.Target_id)
-    res = await sendLocationRequest(token=target.Fcm_token)
+    res = sendLocationRequest(token=target.Fcm_token)
     return {"massage": "Request sent", "message ID": res}
 
 
