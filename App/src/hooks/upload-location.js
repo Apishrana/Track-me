@@ -1,4 +1,9 @@
+import * as Location from 'expo-location';
+import * as SecureStore from 'expo-secure-store';
+
 export default async function uploadLocation(requesterId) {
+    const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+
     const currentLocation = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
     });

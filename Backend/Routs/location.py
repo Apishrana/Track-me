@@ -72,5 +72,5 @@ async def upload_location(
         userID=currUser.User_id,
     )
     requester = getUser(formData.requester)
-    cnf = sendLocationConfirmation(token=requester.Fcm_token, location=formData)
+    cnf = sendLocationConfirmation(token=requester.Fcm_token)
     return cnf
