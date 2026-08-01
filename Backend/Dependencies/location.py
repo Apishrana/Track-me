@@ -43,7 +43,7 @@ def sendLocationRequest(token, requester):
         notification=messaging.Notification(
             title="Location Requested", body="Tap to open the app."
         ),
-        data={"action": "Upload location", "requester": requester},
+        data={"action": "Upload location", "requester": str(requester)},
     )
 
     res = messaging.send(message)

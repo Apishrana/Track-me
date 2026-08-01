@@ -35,9 +35,6 @@ export default function Layout() {
     // }
     useEffect(() => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-            console.log('FCM message received:', remoteMessage);
-            console.log('Notification:', remoteMessage.notification);
-            console.log('Data:', remoteMessage.data);
             if (
                 remoteMessage.data.action.trim().toLowerCase() ==
                 'upload location'

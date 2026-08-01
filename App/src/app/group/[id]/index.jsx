@@ -1,5 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { Camera, Map, Marker } from '@maplibre/maplibre-react-native';
+import messaging from '@react-native-firebase/messaging';
 import { useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useRef, useState } from 'react';
@@ -72,12 +73,12 @@ export default function LocationScreen() {
                 remoteMessage.data.action.trim().toLowerCase() ==
                 'render location'
             ) {
-                loadLocations(group);
+                loadLocations(group, selectedUser.User_id);
             }
         });
 
-        const loadLocations = async (response) => {
-            setLocation(response.Locations?.[user.User_id]);
+        const loadLocations = async (response, User_id) => {
+            const token = await SecureStore.getItemAsync('access_token');
             const locations = {};
 
             await Promise.all(
@@ -102,9 +103,13 @@ export default function LocationScreen() {
                     locations[e.User_id] = locResponse[0];
                 }),
             );
+            // console.log(locations);
             response.Locations = locations;
+            console.log(response);
             setLoading(false);
             setGroup(response);
+            setLocation(response.Locations?.[User_id]);
+            setLocationLoading(false);
         };
         const loadGroups = async () => {
             const token = await SecureStore.getItemAsync('access_token');
@@ -122,11 +127,10 @@ export default function LocationScreen() {
             const response = await res.json();
             const user = JSON.parse(await SecureStore.getItemAsync('user'));
             setSelectedUser(user.User_id);
-            return response;
+            loadLocations(response, user.User_id);
         };
         setLoading(true);
-        response = loadGroups();
-        loadLocations(response);
+        loadGroups();
         return unsubscribe;
     }, []);
     const spin = () => {
