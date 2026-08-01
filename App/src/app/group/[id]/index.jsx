@@ -14,6 +14,7 @@ import {
 import TextTicker from 'react-native-text-ticker';
 
 import Navbar from '@/components/Groups/navbar';
+import Loading from '@/components/loading';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useLoading } from '@/context/LoadingContext';
@@ -24,6 +25,7 @@ export default function LocationScreen() {
     const theme = useTheme();
     const { id } = useLocalSearchParams();
     const { setLoading } = useLoading();
+    const [locationLoading, setLocationLoading] = useState(false);
     const mapRef = useRef(null);
     const [location, setLocation] = useState(null);
     const [group, setGroup] = useState(null);
@@ -40,6 +42,7 @@ export default function LocationScreen() {
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
 
     const updateUserLocation = async () => {
+        setLocationLoading(true);
         const payload = {
             Target_id: selectedUser,
             Group_id: id,
@@ -174,6 +177,7 @@ export default function LocationScreen() {
         <ThemedView style={styles.container}>
             {location && group ? (
                 <>
+                    {locationLoading && <Loading />}
                     <Navbar groupName={group.Group_name} />
                     <Map
                         ref={mapRef}
