@@ -28,6 +28,7 @@ export default function LocationScreen() {
     const { setLoading } = useLoading();
     const [locationLoading, setLocationLoading] = useState(false);
     const mapRef = useRef(null);
+    const cameraRef = useRef(null);
     const [location, setLocation] = useState(null);
     const [group, setGroup] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
@@ -65,6 +66,10 @@ export default function LocationScreen() {
     };
 
     useEffect(() => {
+        setLoading(true);
+        loadGroups();
+    }, []);
+    useEffect(() => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
             console.log('FCM message received:', remoteMessage);
             console.log('Notification:', remoteMessage.notification);
@@ -73,66 +78,70 @@ export default function LocationScreen() {
                 remoteMessage.data.action.trim().toLowerCase() ==
                 'render location'
             ) {
-                loadLocations(group, selectedUser.User_id);
+                const loc = await loadLocations(group, selectedUser);
+                if (loc) {
+                    cameraRef.current?.flyTo({
+                        center: [loc.Longitude, loc.Latitude],
+                        zoom: 17,
+                        duration: 700,
+                    });
+                }
             }
         });
 
-        const loadLocations = async (response, User_id) => {
-            const token = await SecureStore.getItemAsync('access_token');
-            const locations = {};
-
-            await Promise.all(
-                response.Users.map(async (e) => {
-                    const locRes = await fetch(
-                        `${apiUrl}location/get?group_id=${id}&user_id=${e.User_id}`,
-                        {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                Authorization: `Bearer ${token}`,
-                            },
-                        },
-                    );
-
-                    if (!locRes.ok) {
-                        console.log(locRes);
-                        return;
-                    }
-
-                    const locResponse = await locRes.json();
-                    locations[e.User_id] = locResponse[0];
-                }),
-            );
-            // console.log(locations);
-            response.Locations = locations;
-            console.log(response);
-            setLoading(false);
-            setGroup(response);
-            setLocation(response.Locations?.[User_id]);
-            setLocationLoading(false);
-        };
-        const loadGroups = async () => {
-            const token = await SecureStore.getItemAsync('access_token');
-            const res = await fetch(`${apiUrl}groups/get?group_id=${id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            if (!res.ok) {
-                console.log(res);
-                return;
-            }
-            const response = await res.json();
-            const user = JSON.parse(await SecureStore.getItemAsync('user'));
-            setSelectedUser(user.User_id);
-            loadLocations(response, user.User_id);
-        };
-        setLoading(true);
-        loadGroups();
         return unsubscribe;
-    }, []);
+    }, [group, selectedUser]);
+    const loadLocations = async (response, User_id) => {
+        const token = await SecureStore.getItemAsync('access_token');
+        const locations = {};
+
+        await Promise.all(
+            response.Users.map(async (e) => {
+                const locRes = await fetch(
+                    `${apiUrl}location/get?group_id=${id}&user_id=${e.User_id}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${token}`,
+                        },
+                    },
+                );
+
+                if (!locRes.ok) {
+                    console.log(locRes);
+                    return;
+                }
+
+                const locResponse = await locRes.json();
+                locations[e.User_id] = locResponse[0];
+            }),
+        );
+        response.Locations = locations;
+        setLoading(false);
+        setGroup(response);
+        setLocation(response.Locations?.[User_id]);
+        setLocationLoading(false);
+        return response.Locations?.[User_id];
+    };
+    const loadGroups = async () => {
+        const token = await SecureStore.getItemAsync('access_token');
+        const res = await fetch(`${apiUrl}groups/get?group_id=${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        if (!res.ok) {
+            console.log(res);
+            return;
+        }
+        const response = await res.json();
+        const user = JSON.parse(await SecureStore.getItemAsync('user'));
+        setSelectedUser(user.User_id);
+        loadLocations(response, user.User_id);
+    };
     const spin = () => {
         spinAnimation.setValue(0);
         Animated.timing(spinAnimation, {
@@ -194,6 +203,7 @@ export default function LocationScreen() {
                             setZoom(z);
                         }}>
                         <Camera
+                            ref={cameraRef}
                             initialViewState={{
                                 center: [location.Longitude, location.Latitude],
                                 zoom: 17,
@@ -293,7 +303,13 @@ export default function LocationScreen() {
                                 selected={e.User_id == selectedUser}
                                 onPress={() => {
                                     setSelectedUser(e.User_id);
-                                    setLocation(group.Locations?.[e.User_id]);
+                                    const loc = group.Locations?.[e.User_id];
+                                    setLocation(loc);
+                                    cameraRef.current?.flyTo({
+                                        center: [loc.Longitude, loc.Latitude],
+                                        zoom: 17,
+                                        duration: 700,
+                                    });
                                 }}
                             />
                         ))}
