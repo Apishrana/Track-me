@@ -64,39 +64,20 @@ export default function LocationScreen() {
     };
 
     useEffect(() => {
-        // const loadLocation = async () => {
-        //     const { status } =
-        //         await Location.requestForegroundPermissionsAsync();
-
-        //     if (status !== 'granted') {
-        //         console.log('No permission');
-        //         return;
-        //     }
-
-        //     const currentLocation = await Location.getCurrentPositionAsync({
-        //         accuracy: Location.Accuracy.High,
-        //     });
-
-        //     setLocation({
-        //         longitude: currentLocation.coords.longitude,
-        //         latitude: currentLocation.coords.latitude,
-        //         accuracy: currentLocation.coords.accuracy,
-        //     });
-        // };
-        const loadGroups = async () => {
-            const token = await SecureStore.getItemAsync('access_token');
-            const res = await fetch(`${apiUrl}groups/get?group_id=${id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            if (!res.ok) {
-                console.log(res);
-                return;
+        const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+            console.log('FCM message received:', remoteMessage);
+            console.log('Notification:', remoteMessage.notification);
+            console.log('Data:', remoteMessage.data);
+            if (
+                remoteMessage.data.action.trim().toLowerCase() ==
+                'render location'
+            ) {
+                loadLocations(group);
             }
-            const response = await res.json();
+        });
+
+        const loadLocations = async (response) => {
+            setLocation(response.Locations?.[user.User_id]);
             const locations = {};
 
             await Promise.all(
@@ -122,15 +103,31 @@ export default function LocationScreen() {
                 }),
             );
             response.Locations = locations;
+            setLoading(false);
+            setGroup(response);
+        };
+        const loadGroups = async () => {
+            const token = await SecureStore.getItemAsync('access_token');
+            const res = await fetch(`${apiUrl}groups/get?group_id=${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) {
+                console.log(res);
+                return;
+            }
+            const response = await res.json();
             const user = JSON.parse(await SecureStore.getItemAsync('user'));
             setSelectedUser(user.User_id);
-            setGroup(response);
-            setLocation(response.Locations?.[user.User_id]);
-            setLoading(false);
+            return response;
         };
         setLoading(true);
-        loadGroups();
-        // loadLocation();
+        response = loadGroups();
+        loadLocations(response);
+        return unsubscribe;
     }, []);
     const spin = () => {
         spinAnimation.setValue(0);

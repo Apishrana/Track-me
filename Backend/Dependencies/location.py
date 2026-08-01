@@ -50,16 +50,11 @@ def sendLocationRequest(token, requester):
     return res
 
 
-def sendLocationConfirmation(token, location):
+def sendLocationConfirmation(token):
     message = messaging.Message(
         token=token,
         data={
             "action": "Render location",
-            "location": {
-                "Longitude": location.Longitude,
-                "Latitude": location.Latitude,
-                "Accuracy": location.Accuracy,
-            },
         },
     )
 
