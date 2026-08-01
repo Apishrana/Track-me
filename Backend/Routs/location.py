@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 
 from Dependencies.groups import getGroup
 from Models.groups import Group
-from Models.user import User, UserDB
+from Models.user import User
 from Dependencies.auth import getCurrentUser, getUser
 from Dependencies.location import (
     getAllLocation,

@@ -53,8 +53,8 @@ export default function LocationScreen() {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`,
-                body: JSON.stringify(payload),
             },
+            body: JSON.stringify(payload),
         });
         if (!res.ok) {
             console.log(res);

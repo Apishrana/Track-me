@@ -1,5 +1,6 @@
 from db import supabase
 from firebase_admin import messaging
+import fb
 
 
 async def getLocation(user_id):
