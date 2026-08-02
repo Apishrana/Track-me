@@ -12,6 +12,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 if [[ ! -f backend/.env ]] || \
+   ! grep -q "^LOCATION_ENCRYPTION_KEY=" backend/.env || \
    ! grep -q "^FIREBASE_CREDENTIALS=" backend/.env || \
    ! grep -q "^DEBUG=" backend/.env || \
    ! grep -q "^SUPABASE_URL=" backend/.env || \
@@ -34,6 +35,9 @@ TOKEN_EXPIRATION_TIME_MINUTS=525600
 
 # Firebase
 FIREBASE_CREDENTIALS=Use Your firebase.json
+
+# Encryption
+LOCATION_ENCRYPTION_KEY= Generate A Key Using `python -c "import os,base64; print(base64.urlsafe_b64encode(os.urandom(32)).decode())"`
 
 DEBUG=True
 EOF

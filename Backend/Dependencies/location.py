@@ -1,6 +1,39 @@
 from db import supabase
 from firebase_admin import messaging
 import fb
+import os
+import base64
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+
+LOCATION_ENCRYPTION_KEY = base64.urlsafe_b64decode(
+    os.environ["LOCATION_ENCRYPTION_KEY"]
+)
+
+
+def encryptLocationValue(value):
+    nonce = os.urandom(12)
+    aesgcm = AESGCM(LOCATION_ENCRYPTION_KEY)
+    ciphertext = aesgcm.encrypt(nonce, str(value).encode("utf-8"), None)
+    return base64.urlsafe_b64encode(nonce + ciphertext).decode("utf-8")
+
+
+def decryptLocationValue(value):
+    encrypted = base64.urlsafe_b64decode(value.encode("utf-8"))
+    nonce = encrypted[:12]
+    ciphertext = encrypted[12:]
+    aesgcm = AESGCM(LOCATION_ENCRYPTION_KEY)
+    plaintext = aesgcm.decrypt(nonce, ciphertext, None)
+    return float(plaintext.decode("utf-8"))
+
+
+def decryptLocationRows(rows):
+    for row in rows:
+        if row.get("Latitude") is not None:
+            row["Latitude"] = decryptLocationValue(row["Latitude"])
+        if row.get("Longitude") is not None:
+            row["Longitude"] = decryptLocationValue(row["Longitude"])
+    return rows
 
 
 async def getLocation(user_id):
@@ -12,7 +45,7 @@ async def getLocation(user_id):
         .limit(1)
         .execute()
     )
-    return request.data
+    return decryptLocationRows(request.data)
 
 
 async def getAllLocation(user_id):
@@ -23,13 +56,13 @@ async def getAllLocation(user_id):
         .order("Created_at", desc=True)
         .execute()
     )
-    return request.data
+    return decryptLocationRows(request.data)
 
 
 async def uploadLocation(longitude, latitude, accuracy, userID):
     data = {
-        "Latitude": latitude,
-        "Longitude": longitude,
+        "Latitude": encryptLocationValue(latitude),
+        "Longitude": encryptLocationValue(longitude),
         "Accuracy": accuracy,
         "User_id": userID,
     }
