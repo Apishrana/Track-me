@@ -5,7 +5,6 @@ import os
 import base64
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-
 LOCATION_ENCRYPTION_KEY = base64.urlsafe_b64decode(
     os.environ["LOCATION_ENCRYPTION_KEY"]
 )
@@ -30,9 +29,17 @@ def decryptLocationValue(value):
 def decryptLocationRows(rows):
     for row in rows:
         if row.get("Latitude") is not None:
-            row["Latitude"] = decryptLocationValue(row["Latitude"])
+            try:
+                row["Latitude"] = decryptLocationValue(row["Latitude"])
+            except (ValueError, TypeError, base64.binascii.Error):
+                row["Latitude"] = float(row["Latitude"])
+
         if row.get("Longitude") is not None:
-            row["Longitude"] = decryptLocationValue(row["Longitude"])
+            try:
+                row["Longitude"] = decryptLocationValue(row["Longitude"])
+            except (ValueError, TypeError, base64.binascii.Error):
+                row["Longitude"] = float(row["Longitude"])
+
     return rows
 
 
