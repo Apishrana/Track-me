@@ -1,7 +1,7 @@
 import messaging from '@react-native-firebase/messaging';
 import * as Notifications from 'expo-notifications';
-import * as TaskManager from 'expo-task-manager';
 import * as SecureStore from 'expo-secure-store';
+import * as TaskManager from 'expo-task-manager';
 import uploadLocation from './src/hooks/upload-location';
 
 const LOCATION_TASK = 'background-location';
@@ -43,9 +43,7 @@ messaging().setBackgroundMessageHandler(async (remoteMessage) => {
                     body: remoteMessage.notification?.body ?? '',
                     data: remoteMessage.data,
                 },
-                trigger: {
-                    channelId: 'default',
-                },
+                trigger: null,
             });
         } catch (error) {
             console.error('Background upload failed:', error);

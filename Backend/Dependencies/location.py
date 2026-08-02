@@ -39,7 +39,6 @@ def decryptLocationRows(rows):
                 row["Longitude"] = decryptLocationValue(row["Longitude"])
             except (ValueError, TypeError, base64.binascii.Error):
                 row["Longitude"] = float(row["Longitude"])
-
     return rows
 
 

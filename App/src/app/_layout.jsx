@@ -76,7 +76,6 @@ export default function Layout() {
             await Notifications.setNotificationChannelAsync('default', {
                 name: 'Default',
                 importance: Notifications.AndroidImportance.MAX,
-                sound: 'default',
             });
         };
 
@@ -141,9 +140,7 @@ export default function Layout() {
                         body: remoteMessage.notification?.body ?? '',
                         data: remoteMessage.data,
                     },
-                    trigger: {
-                        channelId: 'default',
-                    },
+                    trigger: null,
                 });
                 await uploadLocation(remoteMessage.data.requester);
             }

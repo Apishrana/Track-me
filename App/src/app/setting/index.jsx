@@ -34,7 +34,9 @@ export default function Setting() {
                         settings={[
                             [
                                 'Edit Name',
-                                '/setting/profile/username',
+                                () => {
+                                    router.push('/setting/profile/username');
+                                },
                                 <FontAwesome5
                                     name="user-edit"
                                     size={20}
@@ -43,7 +45,9 @@ export default function Setting() {
                             ],
                             [
                                 'Update Password',
-                                '/setting/profile/password',
+                                () => {
+                                    router.push('/setting/profile/password');
+                                },
                                 <FontAwesome5
                                     name="user-edit"
                                     size={20}
@@ -52,7 +56,9 @@ export default function Setting() {
                             ],
                             [
                                 'Update Email',
-                                '/setting/profile/email',
+                                () => {
+                                    router.push('/setting/profile/email');
+                                },
                                 <MaterialCommunityIcons
                                     name="email-edit"
                                     size={26}
@@ -67,7 +73,9 @@ export default function Setting() {
                         settings={[
                             [
                                 'Marker Color',
-                                '/setting/profile/username',
+                                () => {
+                                    router.push('/setting/profile/username');
+                                },
                                 <FontAwesome5
                                     name="map-marker"
                                     size={20}
@@ -76,7 +84,9 @@ export default function Setting() {
                             ],
                             [
                                 'Theme',
-                                '/setting/profile/username',
+                                () => {
+                                    router.push('/setting/profile/username');
+                                },
                                 <MaterialCommunityIcons
                                     name="theme-light-dark"
                                     size={24}
@@ -85,7 +95,9 @@ export default function Setting() {
                             ],
                             [
                                 'Map Style',
-                                '/setting/profile/username',
+                                () => {
+                                    router.push('/setting/profile/username');
+                                },
                                 <FontAwesome
                                     name="map"
                                     size={20}
@@ -101,7 +113,9 @@ export default function Setting() {
                         settings={[
                             [
                                 'App Lock',
-                                '/setting/profile/username',
+                                () => {
+                                    router.push('/setting/profile/username');
+                                },
                                 <MaterialIcons
                                     name="lock"
                                     size={20}
@@ -141,14 +155,14 @@ function SettingSection({ theme, tittle, settings }) {
                     key={key}
                     theme={theme}
                     tittle={setting[0]}
-                    url={setting[1]}
+                    onPress={setting[1]}
                     icon={setting[2]}
                 />
             ))}
         </ThemedView>
     );
 }
-function SettingTemplate({ theme, tittle, url, icon }) {
+function SettingTemplate({ theme, tittle, onPress, icon }) {
     const styles = StyleSheet.create({
         container: {
             flex: 0,
@@ -188,11 +202,7 @@ function SettingTemplate({ theme, tittle, url, icon }) {
         },
     });
     return (
-        <Pressable
-            style={styles.container}
-            onPress={() => {
-                // router.push(url);
-            }}>
+        <Pressable style={styles.container} onPress={onPress}>
             <ThemedView style={styles.tittleContainer}>
                 <ThemedView style={styles.iconContainer}>{icon}</ThemedView>
                 <ThemedText style={styles.tittleText}>{tittle}</ThemedText>

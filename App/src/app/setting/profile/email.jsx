@@ -9,8 +9,8 @@ import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
 import { router } from 'expo-router';
 
-export default function UpdateUsername() {
-    const [userName, setUserName] = useState(null);
+export default function UpdateEmail() {
+    const [email, setEmail] = useState(null);
     const [btnPressed, setBtnPressed] = useState(false);
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
@@ -19,10 +19,10 @@ export default function UpdateUsername() {
         setBtnPressed(true);
 
         const payload = {
-            newName: userName,
+            Email: email,
         };
         const token = await SecureStore.getItemAsync('access_token');
-        const res = await fetch(`${apiUrl}user/update/name`, {
+        const res = await fetch(`${apiUrl}user/update/Email`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -31,14 +31,14 @@ export default function UpdateUsername() {
             body: JSON.stringify(payload),
         });
         if (!res.ok) {
-            ToastAndroid.show('Username Update Failed!', ToastAndroid.SHORT);
+            ToastAndroid.show('Email Update Failed!', ToastAndroid.SHORT);
             console.log(res);
             return;
         }
         console.log(await res.json());
         setBtnPressed(false);
         router.push('/setting');
-        ToastAndroid.show('Username updated!', ToastAndroid.SHORT);
+        ToastAndroid.show('Email updated!', ToastAndroid.SHORT);
     };
 
     const styles = StyleSheet.create({
@@ -47,7 +47,6 @@ export default function UpdateUsername() {
         },
         title: {
             fontSize: 28,
-            // fontWeight: 'bold',
             marginBottom: 10,
             height: 32,
         },
@@ -67,12 +66,15 @@ export default function UpdateUsername() {
                 style={{
                     padding: 20,
                 }}>
-                <ThemedText style={styles.title}>Update User Name</ThemedText>
+                <ThemedText style={styles.title}>Update Email</ThemedText>
                 <ThemedTextInput
                     style={styles.input}
-                    placeholder="enter new name"
-                    value={userName}
-                    onChangeText={setUserName}
+                    placeholder="enter new email"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    value={email}
+                    onChangeText={setEmail}
                 />
                 <Button onPress={update} disabled={btnPressed}>
                     Update
