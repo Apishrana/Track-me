@@ -3,7 +3,7 @@ import {
     InstrumentSans_500Medium,
     InstrumentSans_600SemiBold,
     InstrumentSans_700Bold,
-} from '@expo-google-fonts/instrument-sans';
+} from '@expo-google-fonts/instrument-sans';import notifee, { AndroidImportance } from '@notifee/react-native';
 import { useFonts } from 'expo-font';
 import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -32,9 +32,30 @@ export default function Layout() {
     });
     // if (!fontsLoaded) {
     //     return null;
-    // }
+    // }async function showNotification(remoteMessage) {
+    const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default',
+        importance: AndroidImportance.HIGH,
+    });
+
+    await notifee.displayNotification({
+        title: remoteMessage.notification?.title ?? 'Locate',
+        body: remoteMessage.notification?.body ?? '',
+        android: {
+            channelId,
+            pressAction: {
+                id: 'default',
+            },
+        },
+    });
+}
     useEffect(() => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+            console.log('FCM message received:', remoteMessage);
+            // console.log('Notification:', remoteMessage.notification); // TODO implement notification
+        await showNotification(remoteMessage);
+            console.log('Data:', remoteMessage.data);
             if (
                 remoteMessage.data.action.trim().toLowerCase() ==
                 'upload location'
