@@ -170,7 +170,6 @@ export default function LocationScreen() {
         },
         userNav: {
             height: 60,
-            marginBottom: 5,
             borderColor: theme.borderColor,
             borderWidth: 1,
             flexDirection: 'row',

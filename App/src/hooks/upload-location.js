@@ -4,9 +4,23 @@ import * as SecureStore from 'expo-secure-store';
 export default async function uploadLocation(requesterId) {
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
 
-    const currentLocation = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-    });
+    const cachedLocationJson = await SecureStore.getItemAsync('background_location');
+    let currentLocation = null;
+
+    if (cachedLocationJson) {
+        const cachedLocation = JSON.parse(cachedLocationJson);
+        const age = Date.now() - cachedLocation.timestamp;
+
+        if (age <= 30_000) {
+            currentLocation = cachedLocation;
+        }
+    }
+
+    if (!currentLocation) {
+        currentLocation = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+        });
+    }
 
     const payload = {
         Longitude: currentLocation.coords.longitude,
