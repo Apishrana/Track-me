@@ -5,15 +5,22 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
-import { Pressable, ScrollView, StyleSheet } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Modal, Pressable, ScrollView, StyleSheet } from 'react-native';
+import ColorPicker, {
+    HueSlider,
+    Panel1,
+    Preview,
+} from 'reanimated-color-picker';
 
 import Navbar from '@/components/Setting/navbar';
 
 export default function Setting() {
     const theme = useTheme();
+    const [popup, setPopup] = useState(null);
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -73,9 +80,7 @@ export default function Setting() {
                         settings={[
                             [
                                 'Marker Color',
-                                () => {
-                                    router.push('/setting/profile/username');
-                                },
+                                () => setPopup('markerColor'),
                                 <FontAwesome5
                                     name="map-marker"
                                     size={20}
@@ -84,20 +89,17 @@ export default function Setting() {
                             ],
                             [
                                 'Theme',
-                                () => {
-                                    router.push('/setting/profile/username');
-                                },
+                                () => setPopup('theme'),
                                 <MaterialCommunityIcons
                                     name="theme-light-dark"
                                     size={24}
                                     color={theme.text}
                                 />,
                             ],
+                            // TODO
                             [
                                 'Map Style',
-                                () => {
-                                    router.push('/setting/profile/username');
-                                },
+                                () => router.push('/setting/Customization/map'),
                                 <FontAwesome
                                     name="map"
                                     size={20}
@@ -106,7 +108,7 @@ export default function Setting() {
                             ],
                         ]}
                     />
-
+                    {/* 
                     <SettingSection
                         theme={theme}
                         tittle={'Security'}
@@ -123,10 +125,16 @@ export default function Setting() {
                                 />,
                             ],
                         ]}
-                    />
+                    /> */}
                     <Logout theme={theme} />
                 </ThemedView>
             </ScrollView>
+            <CustomizationPopup
+                theme={theme}
+                type={popup}
+                visible={popup !== null}
+                onClose={() => setPopup(null)}
+            />
         </ThemedView>
     );
 }
@@ -242,5 +250,178 @@ function Logout({ theme }) {
             }}>
             <ThemedText style={styles.text}>Log Out</ThemedText>
         </Pressable>
+    );
+}
+
+function CustomizationPopup({ theme, type, visible, onClose }) {
+    const colorRff = useRef(null);
+    const [color, setColor] = useState(null);
+    const [selectedTheme, setSelectedTheme] = useState(null);
+    const titles = {
+        markerColor: 'Select Marker Color',
+        theme: 'Select Theme',
+    };
+    const styles = StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+            paddingHorizontal: 24,
+            backgroundColor: '#00000060',
+        },
+        overlay: {
+            ...StyleSheet.absoluteFill,
+            backgroundColor: '#00000000',
+        },
+        popup: {
+            backgroundColor: theme.background,
+            width: '100%',
+            borderRadius: 16,
+            borderWidth: 1,
+            borderColor: theme.borderColor,
+            zIndex: 20,
+        },
+        cancel: {
+            height: 50,
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderWidth: 1,
+            borderColor: theme.borderColorLight,
+            borderRadius: 16,
+            marginTop: 10,
+        },
+        cancelText: {
+            fontSize: 20,
+            fontFamily: 'InstrumentSans_600SemiBold',
+            color: theme.textSecondary,
+        },
+        title: {
+            paddingVertical: 15,
+            fontSize: 22,
+            lineHeight: 26,
+            borderWidth: 1,
+            borderColor: theme.borderColorLight,
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            textAlign: 'center',
+            fontFamily: 'InstrumentSans_600SemiBold',
+        },
+    });
+    useEffect(() => {
+        const setup = async () => {
+            const c = await SecureStore.getItemAsync('marker_color');
+            if (c) {
+                setColor(c);
+            } else {
+                setColor('#256aff');
+            }
+            const t = await SecureStore.getItemAsync('theme');
+            if (t) {
+                setSelectedTheme(t);
+            } else {
+                setSelectedTheme('system');
+            }
+        };
+        setup();
+    }, []);
+    return (
+        <Modal
+            visible={visible}
+            transparent
+            animationType="fade"
+            onRequestClose={onClose}>
+            <ThemedView style={styles.container}>
+                <Pressable style={styles.overlay} onPress={onClose} />
+                <ThemedView style={styles.popup}>
+                    <ThemedText style={styles.title}>{titles[type]}</ThemedText>
+                    {type == 'markerColor' ? (
+                        <>
+                            <ColorPicker
+                                ref={colorRff}
+                                value={color}
+                                onChangeJS={(e) => {
+                                    setColor(e.hex);
+                                }}>
+                                <Preview />
+                                <Panel1 />
+                                <HueSlider />
+                            </ColorPicker>
+                            <Pressable
+                                style={styles.cancel}
+                                onPress={async () => {
+                                    await SecureStore.setItemAsync(
+                                        'marker_color',
+                                        color,
+                                    );
+                                }}>
+                                <ThemedText style={styles.cancelText}>
+                                    Save
+                                </ThemedText>
+                            </Pressable>
+                            <Pressable
+                                style={styles.cancel}
+                                onPress={async () => {
+                                    colorRff.current?.setColor('#256aff');
+                                    await SecureStore.setItemAsync(
+                                        'marker_color',
+                                        '#256aff',
+                                    );
+                                    onClose();
+                                }}>
+                                <ThemedText style={styles.cancelText}>
+                                    Reset
+                                </ThemedText>
+                            </Pressable>
+                            <Pressable style={styles.cancel} onPress={onClose}>
+                                <ThemedText style={styles.cancelText}>
+                                    Cancel
+                                </ThemedText>
+                            </Pressable>
+                        </>
+                    ) : type == 'theme' ? (
+                        <>
+                            <ThemedView
+                                style={{
+                                    borderColor: theme.borderColor,
+                                    borderWidth: 1,
+                                    marginTop: 10,
+                                    marginHorizontal: 18,
+                                }}>
+                                <Picker
+                                    selectedValue={selectedTheme}
+                                    onValueChange={async (e) => {
+                                        setSelectedTheme(e);
+                                        await SecureStore.setItemAsync(
+                                            'theme',
+                                            selectedTheme,
+                                        );
+                                    }}>
+                                    <Picker.Item
+                                        label="System"
+                                        value={'system'}
+                                        style={{ fontSize: 20 }}
+                                    />
+                                    <Picker.Item
+                                        label="Dark"
+                                        value={'dark'}
+                                        style={{ fontSize: 20 }}
+                                    />
+                                    <Picker.Item
+                                        label="Light"
+                                        value={'light'}
+                                        style={{ fontSize: 20 }}
+                                    />
+                                </Picker>
+                            </ThemedView>
+                            <Pressable style={styles.cancel} onPress={onClose}>
+                                <ThemedText style={styles.cancelText}>
+                                    Continue
+                                </ThemedText>
+                            </Pressable>
+                        </>
+                    ) : null}
+                </ThemedView>
+            </ThemedView>
+        </Modal>
     );
 }
