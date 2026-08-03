@@ -8,6 +8,7 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import * as Updates from 'expo-updates';
 import { useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet } from 'react-native';
 import ColorPicker, {
@@ -391,6 +392,7 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                             e,
                                         );
                                         setSelectedTheme(e);
+                                        await Updates.reloadAsync();
                                     }}>
                                     <Picker.Item
                                         label="System"

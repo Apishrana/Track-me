@@ -16,29 +16,12 @@ import UserLoading from '@/components/Loading/UserLoading';
 import { ThemedSafeAreaView } from '@/components/themed-safe-area-view';
 import { LoadingContext } from '@/context/LoadingContext';
 import uploadLocation from '@/hooks/upload-location';
+import { useTheme } from '@/hooks/use-theme';
 import messaging from '@react-native-firebase/messaging';
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 
 SplashScreen.preventAutoHideAsync();
-
-// messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-//     console.log('Background FCM:', remoteMessage);
-
-//     if (remoteMessage.data?.action?.trim().toLowerCase() == 'upload location') {
-//         await Notifications.scheduleNotificationAsync({
-//             content: {
-//                 title: remoteMessage.notification?.title ?? 'Locate Me',
-//                 body: remoteMessage.notification?.body ?? '',
-//                 data: remoteMessage.data,
-//             },
-//             trigger: {
-//                 channelId: 'default',
-//             },
-//         });
-//         uploadLocation(remoteMessage.data.requester);
-//     }
-// });
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -51,7 +34,7 @@ Notifications.setNotificationHandler({
 
 export default function Layout() {
     const [loading, setLoading] = useState(true);
-
+    const theme = useTheme();
     const colorScheme = useColorScheme();
     const [fontsLoaded] = useFonts({
         InstrumentSans_400Regular,
@@ -136,8 +119,8 @@ export default function Layout() {
             ) {
                 await Notifications.scheduleNotificationAsync({
                     content: {
-                        title: remoteMessage.notification?.title ?? 'Locate Me',
-                        body: remoteMessage.notification?.body ?? '',
+                        title: remoteMessage.notification?.title,
+                        body: remoteMessage.notification?.body,
                         data: remoteMessage.data,
                     },
                     trigger: null,
@@ -155,13 +138,14 @@ export default function Layout() {
                 <AnimatedSplashOverlay />
                 <StatusBar
                     barStyle={
-                        colorScheme === 'dark'
+                        // colorScheme === 'dark'
+                        //     ? 'light-content'
+                        //     : 'dark-content'
+                        theme.background === '#000000'
                             ? 'light-content'
                             : 'dark-content'
                     }
-                    backgroundColor={
-                        colorScheme === 'dark' ? '#000000' : '#ffffff'
-                    }
+                    backgroundColor={theme.background}
                 />
                 {loading && <UserLoading />}
                 <ThemedSafeAreaView style={{ flex: 1 }}>
