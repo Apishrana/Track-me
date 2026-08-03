@@ -353,6 +353,7 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                         'marker_color',
                                         color,
                                     );
+                                    onClose();
                                 }}>
                                 <ThemedText style={styles.cancelText}>
                                     Save
@@ -362,11 +363,6 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                 style={styles.cancel}
                                 onPress={async () => {
                                     colorRff.current?.setColor('#256aff');
-                                    await SecureStore.setItemAsync(
-                                        'marker_color',
-                                        '#256aff',
-                                    );
-                                    onClose();
                                 }}>
                                 <ThemedText style={styles.cancelText}>
                                     Reset
@@ -390,26 +386,35 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                 <Picker
                                     selectedValue={selectedTheme}
                                     onValueChange={async (e) => {
-                                        setSelectedTheme(e);
                                         await SecureStore.setItemAsync(
                                             'theme',
-                                            selectedTheme,
+                                            e,
                                         );
+                                        setSelectedTheme(e);
                                     }}>
                                     <Picker.Item
                                         label="System"
                                         value={'system'}
-                                        style={{ fontSize: 20 }}
+                                        style={{
+                                            fontSize: 20,
+                                            color: theme.text,
+                                        }}
                                     />
                                     <Picker.Item
                                         label="Dark"
                                         value={'dark'}
-                                        style={{ fontSize: 20 }}
+                                        style={{
+                                            fontSize: 20,
+                                            color: theme.text,
+                                        }}
                                     />
                                     <Picker.Item
                                         label="Light"
                                         value={'light'}
-                                        style={{ fontSize: 20 }}
+                                        style={{
+                                            fontSize: 20,
+                                            color: theme.text,
+                                        }}
                                     />
                                 </Picker>
                             </ThemedView>

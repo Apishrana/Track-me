@@ -31,6 +31,7 @@ export default function LocationScreen() {
     const cameraRef = useRef(null);
     const [location, setLocation] = useState(null);
     const [group, setGroup] = useState(null);
+    const [markerColor, setMarkerColor] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
     const [zoom, setZoom] = useState(17);
     const spinAnimation = useRef(new Animated.Value(0)).current;
@@ -68,6 +69,15 @@ export default function LocationScreen() {
     useEffect(() => {
         setLoading(true);
         loadGroups();
+        const setup = async () => {
+            const c = await SecureStore.getItemAsync('marker_color');
+            if (c) {
+                setMarkerColor(c);
+            } else {
+                setMarkerColor('#256aff');
+            }
+        };
+        setup();
     }, []);
     useEffect(() => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
@@ -217,7 +227,7 @@ export default function LocationScreen() {
                                     width: markerSize,
                                     height: markerSize,
                                     borderRadius: markerSize / 2,
-                                    backgroundColor: '#256aff',
+                                    backgroundColor: markerColor,
                                     opacity: 0.5,
                                     borderWidth: 1,
                                     alignItems: 'center',
@@ -229,7 +239,7 @@ export default function LocationScreen() {
                                         width: dotSize,
                                         height: dotSize,
                                         borderRadius: dotSize / 2,
-                                        backgroundColor: '#256aff',
+                                        backgroundColor: markerColor,
                                     }}
                                 />
                             </View>
