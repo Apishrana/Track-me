@@ -29,7 +29,7 @@ async def get_group(group_id: int, currUser: User = Depends(getCurrentUser)):
 async def cerate_group(
     formData: CreateGroupModel, currUser: User = Depends(getCurrentUser)
 ):
-    groupID = await createGroup(groupName=formData.groupName, user=currUser)
+    groupID = await createGroup(groupName=formData.GroupName, user=currUser)
     return {"message": "Group Created", "id": groupID}
 
 
