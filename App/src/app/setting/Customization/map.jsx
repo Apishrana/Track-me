@@ -29,7 +29,17 @@ export default function MapTypeSelection() {
             padding: 10,
         },
     });
-    useEffect(() => {}, []);
+    useEffect(() => {
+        const setup = async () => {
+            const m = await SecureStore.getItemAsync('map_style');
+            if (m) {
+                setSelectedMapStyle(m);
+            } else {
+                setSelectedMapStyle('streets-v4');
+            }
+        };
+        setup();
+    }, []);
     return (
         <ThemedView style={styles.container}>
             <Navbar backUrl={'/setting'} />

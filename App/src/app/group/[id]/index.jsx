@@ -23,6 +23,7 @@ import { useTheme } from '@/hooks/use-theme';
 import { Image } from 'expo-image';
 
 export default function LocationScreen() {
+    const [mapStyle, setMapStyle] = useState(null);
     const theme = useTheme();
     const { id } = useLocalSearchParams();
     const { setLoading } = useLoading();
@@ -75,6 +76,12 @@ export default function LocationScreen() {
                 setMarkerColor(c);
             } else {
                 setMarkerColor('#256aff');
+            }
+            const m = await SecureStore.getItemAsync('map_style');
+            if (m) {
+                setMapStyle(m);
+            } else {
+                setMapStyle('streets-v4');
             }
         };
         setup();
@@ -202,11 +209,7 @@ export default function LocationScreen() {
                     <Map
                         ref={mapRef}
                         style={styles.map}
-                        // mapStyle="https://tiles.openfreemap.org/styles/liberty"
-                        mapStyle={`https://api.maptiler.com/maps/streets-v4/style.json?key=${MAPTILER_KEY}`}
-                        // mapStyle={`https://api.maptiler.com/maps/toner-v2/style.json?key=${MAPTILER_KEY}`}
-                        // mapStyle={`https://api.maptiler.com/maps/hybrid-v4/style.json?key=${MAPTILER_KEY}`}
-
+                        mapStyle={`https://api.maptiler.com/maps/${mapStyle}/style.json?key=${MAPTILER_KEY}`}
                         onRegionIsChanging={async () => {
                             const z = await mapRef.current?.getZoom();
                             setZoom(z);
