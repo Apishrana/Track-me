@@ -97,7 +97,6 @@ export default function Setting() {
                                     color={theme.text}
                                 />,
                             ],
-                            // TODO
                             [
                                 'Map Style',
                                 () => router.push('/setting/Customization/map'),
@@ -109,8 +108,7 @@ export default function Setting() {
                             ],
                         ]}
                     />
-                    {/* 
-                    <SettingSection
+                    {/* <SettingSection
                         theme={theme}
                         tittle={'Security'}
                         settings={[
