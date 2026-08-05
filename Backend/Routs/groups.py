@@ -44,7 +44,6 @@ async def cerate_group(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not the group owner"
         )
     inviteTarget = getUserFromEmail(formData.UserEmail)
-    print(type(inviteTarget))
     inviteTarget.Groups_invited.append(formData.groupID)
     print(inviteTarget)
     await updateUserData(inviteTarget)

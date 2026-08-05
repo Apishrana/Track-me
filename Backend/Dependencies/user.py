@@ -11,6 +11,7 @@ async def updateUserData(user: UserDB):
                 "Password": user.Password,
                 "Name": user.Name,
                 "Groups_joined": user.Groups_joined,
+                "Groups_invited": user.Groups_invited,
                 "Fcm_token": user.Fcm_token,
             }
         )
