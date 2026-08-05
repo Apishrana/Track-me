@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import TextTicker from 'react-native-text-ticker';
 
+import AddUserModal from '@/components/Groups/add-user-modal';
 import Navbar from '@/components/Groups/navbar';
 import Loading from '@/components/loading';
 import { ThemedText } from '@/components/themed-text';
@@ -34,6 +35,8 @@ export default function LocationScreen() {
     const [group, setGroup] = useState(null);
     const [markerColor, setMarkerColor] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
+    const [user, setUser] = useState(null);
+    const [visible, setVisible] = useState(false);
     const [zoom, setZoom] = useState(17);
     const spinAnimation = useRef(new Animated.Value(0)).current;
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
@@ -156,6 +159,7 @@ export default function LocationScreen() {
         }
         const response = await res.json();
         const user = JSON.parse(await SecureStore.getItemAsync('user'));
+        setUser(user);
         setSelectedUser(user.User_id);
         loadLocations(response, user.User_id);
     };
@@ -199,13 +203,18 @@ export default function LocationScreen() {
             width: '85%',
         },
     });
-
     return (
         <ThemedView style={styles.container}>
             {location && group ? (
                 <>
                     {locationLoading && <Loading />}
-                    <Navbar groupName={group.Group_name} />
+                    <Navbar
+                        groupName={group.Group_name}
+                        groupOwner={group.Created_by == user.User_id}
+                        onUserButtonPress={() => {
+                            setVisible(true);
+                        }}
+                    />
                     <Map
                         ref={mapRef}
                         style={styles.map}
@@ -331,6 +340,14 @@ export default function LocationScreen() {
             ) : (
                 <></>
             )}
+            <AddUserModal
+                theme={theme}
+                visible={visible}
+                onClose={() => {
+                    setVisible(false);
+                }}
+                groupID={id}
+            />
         </ThemedView>
     );
 }

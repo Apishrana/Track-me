@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from Dependencies.user import updateUserData
 from Dependencies.groups import createGroup, getGroup
 from Models.groups import CreateGroupModel, Group, GroupInviteModel
 from Dependencies.auth import getCurrentUser, getUser, getUserFromEmail
@@ -45,4 +46,5 @@ async def cerate_group(
     for i in formData.UserEmail:
         inviteTarget = getUserFromEmail(i)
         inviteTarget.Groups_invited.append(formData.groupID)
+        await updateUserData(inviteTarget)
     return {"message": "Invite sent", "ids": formData.UserEmail}

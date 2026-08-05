@@ -190,8 +190,7 @@ function CreateGroupPopup({ theme, visible, onClose }) {
             console.log(res);
             return;
         }
-        console.log(await res.json());
-        setBtnPressed(false);
+        console.log(await res.json()); 
         await Updates.reloadAsync();
     };
 
