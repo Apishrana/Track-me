@@ -46,5 +46,6 @@ async def cerate_group(
     for i in formData.UserEmail:
         inviteTarget = getUserFromEmail(i)
         inviteTarget.Groups_invited.append(formData.groupID)
+        print(inviteTarget)
         await updateUserData(inviteTarget)
     return {"message": "Invite sent", "ids": formData.UserEmail}
