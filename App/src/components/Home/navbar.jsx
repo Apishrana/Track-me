@@ -4,8 +4,13 @@ import { Animated, Easing, Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import Ionicons from '@expo/vector-icons/Ionicons';
 
-export default function Navbar({ hamburgerOpen, setHamburgerOpen }) {
+export default function Navbar({
+    hamburgerOpen,
+    setHamburgerOpen,
+    onNotificationPress,
+}) {
     const theme = useTheme();
     const rotation = useRef(new Animated.Value(0)).current;
 
@@ -70,6 +75,26 @@ export default function Navbar({ hamburgerOpen, setHamburgerOpen }) {
             fontSize: 32,
             fontFamily: 'InstrumentSans_500Medium',
         },
+        notificationButton: {
+            position: 'absolute',
+            right: 16,
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+            aspectRatio: 1,
+        },
+        notificationText: {
+            position: 'absolute',
+            fontStyle: 5,
+            backgroundColor: 'red',
+            borderRadius: 10,
+            top: 2,
+            right: 2,
+            width: 20,
+            height: 20,
+            lineHeight: 20,
+            textAlign: 'center',
+        },
     });
 
     return (
@@ -110,6 +135,12 @@ export default function Navbar({ hamburgerOpen, setHamburgerOpen }) {
             </Pressable>
 
             <ThemedText style={styles.title}>Locate me</ThemedText>
+            <Pressable
+                style={styles.notificationButton}
+                onPress={onNotificationPress}>
+                <ThemedText style={styles.notificationText}>1</ThemedText>
+                <Ionicons name="notifications" size={32} color={theme.text} />
+            </Pressable>
         </ThemedView>
     );
 }

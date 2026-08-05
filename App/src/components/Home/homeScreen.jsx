@@ -10,8 +10,8 @@ import Sidebar from './sidebar';
 
 export default function HomeScreen({ user }) {
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
+    const [visibleNotification, setVisibleNotification] = useState(false);
     const { setLoading } = useLoading();
-
     const [groups, setGroups] = useState([]);
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
@@ -44,10 +44,17 @@ export default function HomeScreen({ user }) {
             <Navbar
                 hamburgerOpen={hamburgerOpen}
                 setHamburgerOpen={setHamburgerOpen}
+                onNotificationPress={() => {
+                    setVisibleNotification(true);
+                }}
             />
             <ThemedView style={styles.container}>
-                <Hero user={user} groups={groups} />
-                {/* {hamburgerOpen ? <Sidebar /> : <></>} */}
+                <Hero
+                    user={user}
+                    groups={groups}
+                    visibleNotification={visibleNotification}
+                    setVisibleNotification={setVisibleNotification}
+                />
                 <Sidebar
                     isOpen={hamburgerOpen}
                     user={user}
@@ -55,6 +62,7 @@ export default function HomeScreen({ user }) {
                     setHamburgerOpen={setHamburgerOpen}
                 />
             </ThemedView>
+            <></>
         </ThemedView>
     );
 }

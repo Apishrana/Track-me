@@ -46,6 +46,12 @@ async def groups_invite(currUser: User = Depends(getCurrentUser)):
     returnData = []
     for i in invitedGroups:
         grp: GroupDB = await getGroup(i)
+        u = []
+        for i in grp.Users:
+            usr: User = getUser(i)
+            u.append(usr)
+        grp.Users = u
+        returnData.append(grp)
         returnData.append(grp)
     return {"Groups": returnData}
 
