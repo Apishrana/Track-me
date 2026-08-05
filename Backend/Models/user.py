@@ -17,19 +17,10 @@ class User(BaseModel):
     Groups_joined: list[int] | None = None
     Groups_invited: list[int] | None = None
 
-    @field_validator("Groups_joined", mode="before")
+    @field_validator("Groups_joined", "Groups_invited", mode="before")
     @classmethod
     def none_to_empty_list(cls, v):
-        if v is None:
-            return []
-        return v
-
-    @field_validator("Groups_invited", mode="before")
-    @classmethod
-    def none_to_empty_list(cls, v):
-        if v is None:
-            return []
-        return v
+        return [] if v is None else v
 
 
 class UserDB(User):

@@ -22,7 +22,7 @@ export default function AddUserModal({ theme, visible, onClose, groupID }) {
         }
         const payload = {
             groupID: groupID,
-            UserEmail: [n],
+            UserEmail: n,
         };
         const token = await SecureStore.getItemAsync('access_token');
         const res = await fetch(`${apiUrl}groups/invite`, {
