@@ -409,9 +409,47 @@ function Notification({
 
 function GroupInviteTemplate({ group }) {
     const theme = useTheme();
-
-    const RejectGroup = () => {};
-    const JoinGroup = () => {};
+    const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
+    const RejectGroup = async () => {
+        const token = await SecureStore.getItemAsync('access_token');
+        const res = await fetch(
+            `${apiUrl}groups/invite/reject?group_id=${group.Group_id}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
+        if (!res.ok) {
+            ToastAndroid.show('Email Update Failed!', ToastAndroid.SHORT);
+            console.log(res);
+            return;
+        }
+        console.log(await res.json());
+        await Updates.reloadAsync();
+    };
+    const JoinGroup = async () => {
+        const token = await SecureStore.getItemAsync('access_token');
+        const res = await fetch(
+            `${apiUrl}groups/invite/accept?group_id=${group.Group_id}`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        );
+        if (!res.ok) {
+            ToastAndroid.show('Email Update Failed!', ToastAndroid.SHORT);
+            console.log(res);
+            return;
+        }
+        console.log(await res.json());
+        await Updates.reloadAsync();
+    };
 
     const styles = StyleSheet.create({
         container: {
