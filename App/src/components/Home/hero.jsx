@@ -365,6 +365,7 @@ function Notification({ theme, visible, onClose }) {
             }
             const response = await res.json();
             console.log(response.Groups);
+            console.log(response);
             setGroups(response.Groups);
         };
         getGroup();
