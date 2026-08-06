@@ -54,7 +54,7 @@ async def invite_user(
     return {"message": "Invite sent", "id": formData.UserEmail}
 
 
-@router.get("/invite/accept")
+@router.patch("/invite/accept")
 async def accept_invite(group_id: int, currUser: User = Depends(getCurrentUser)):
     if group_id not in currUser.Groups_invited:
         raise HTTPException(
@@ -68,7 +68,7 @@ async def accept_invite(group_id: int, currUser: User = Depends(getCurrentUser))
     }
 
 
-@router.get("/invite/reject")
+@router.patch("/invite/reject")
 async def reject_invite(group_id: int, currUser: User = Depends(getCurrentUser)):
     if group_id not in currUser.Groups_invited:
         raise HTTPException(

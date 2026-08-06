@@ -409,6 +409,10 @@ function Notification({
 
 function GroupInviteTemplate({ group }) {
     const theme = useTheme();
+
+    const RejectGroup = () => {};
+    const JoinGroup = () => {};
+
     const styles = StyleSheet.create({
         container: {
             height: 60,
@@ -489,10 +493,10 @@ function GroupInviteTemplate({ group }) {
                 </ThemedText>
             </ThemedView>
             <ThemedView style={styles.buttonContainer}>
-                <Pressable style={styles.button}>
+                <Pressable style={styles.button} onPress={RejectGroup}>
                     <Entypo name="cross" size={35} color={theme.text} />
                 </Pressable>
-                <Pressable style={styles.button}>
+                <Pressable style={styles.button} onPress={JoinGroup}>
                     <FontAwesome5 name="check" size={25} color={theme.text} />
                 </Pressable>
             </ThemedView>
