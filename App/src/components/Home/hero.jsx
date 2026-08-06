@@ -1,4 +1,6 @@
 import { useTheme } from '@/hooks/use-theme';
+import Entypo from '@expo/vector-icons/Entypo';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { router } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
@@ -14,6 +16,8 @@ export default function Hero({
     groups,
     visibleNotification,
     setVisibleNotification,
+    setNotificationCont,
+    setLoading,
 }) {
     const [visibleModal, setVisibleModal] = useState(false);
     const theme = useTheme();
@@ -96,6 +100,8 @@ export default function Hero({
                 onClose={() => {
                     setVisibleNotification(false);
                 }}
+                setNotificationCont={setNotificationCont}
+                setLoading={setLoading}
             />
         </ScrollView>
     );
@@ -295,7 +301,13 @@ function CreateGroupPopup({ theme, visible, onClose }) {
     );
 }
 
-function Notification({ theme, visible, onClose }) {
+function Notification({
+    theme,
+    visible,
+    onClose,
+    setNotificationCont,
+    setLoading,
+}) {
     const [groups, setGroups] = useState(null);
     const styles = StyleSheet.create({
         container: {
@@ -364,9 +376,9 @@ function Notification({ theme, visible, onClose }) {
                 return;
             }
             const response = await res.json();
-            console.log(response.Groups);
-            console.log(response);
+            setNotificationCont(response.Groups.length);
             setGroups(response.Groups);
+            setLoading(false);
         };
         getGroup();
     }, []);
@@ -399,7 +411,7 @@ function GroupInviteTemplate({ group }) {
     const theme = useTheme();
     const styles = StyleSheet.create({
         container: {
-            height: 70,
+            height: 60,
             flex: 0,
             flexDirection: 'row',
             alignItems: 'center',
@@ -407,18 +419,18 @@ function GroupInviteTemplate({ group }) {
             borderColor: theme.borderColor,
         },
         imageContainer: {
-            height: 70,
-            width: 70,
-            marginRight: 20,
+            height: 60,
+            width: 60,
+            marginRight: 10,
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#ffffff00',
         },
         image: {
-            height: 50,
-            width: 50,
-            borderRadius: 25,
+            height: 40,
+            width: 40,
+            borderRadius: 20,
             borderWidth: 1,
             borderColor: theme.borderColor,
             backgroundColor: '#f00',
@@ -426,24 +438,39 @@ function GroupInviteTemplate({ group }) {
         infoContainer: {
             justifyContent: 'center',
             flex: 1,
-            height: 70,
+            height: 60,
             backgroundColor: '#ffffff00',
+            marginRight: 10,
         },
         groupName: {
-            fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 22,
-            marginRight: 15,
+            fontFamily: 'InstrumentSans_500Medium',
+            fontSize: 16,
+            marginRight: 0,
         },
         userName: {
             fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 20,
-            marginRight: 15,
+            fontSize: 14,
+            marginRight: 0,
+        },
+        buttonContainer: {
+            gap: 5,
+            width: 85,
+            height: 40,
+            marginRight: 10,
+            flexDirection: 'row',
+        },
+        button: {
+            height: 40,
+            width: 40,
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: theme.borderColorLight,
         },
     });
     return (
-        <Pressable
-            style={styles.container}
-            onPress={() => router.push(`/group/${group.Group_id}`)}>
+        <ThemedView style={styles.container}>
             <ThemedView style={styles.imageContainer}>
                 <Image style={styles.image}></Image>
             </ThemedView>
@@ -461,6 +488,14 @@ function GroupInviteTemplate({ group }) {
                     {group.Users.map((e) => e.Name).join(' ,')}
                 </ThemedText>
             </ThemedView>
-        </Pressable>
+            <ThemedView style={styles.buttonContainer}>
+                <Pressable style={styles.button}>
+                    <Entypo name="cross" size={35} color={theme.text} />
+                </Pressable>
+                <Pressable style={styles.button}>
+                    <FontAwesome5 name="check" size={25} color={theme.text} />
+                </Pressable>
+            </ThemedView>
+        </ThemedView>
     );
 }

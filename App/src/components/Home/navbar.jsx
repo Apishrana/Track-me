@@ -10,6 +10,7 @@ export default function Navbar({
     hamburgerOpen,
     setHamburgerOpen,
     onNotificationPress,
+    notificationCont,
 }) {
     const theme = useTheme();
     const rotation = useRef(new Animated.Value(0)).current;
@@ -58,11 +59,12 @@ export default function Navbar({
         },
         menuButton: {
             position: 'absolute',
-            left: 16,
-            height: '100%',
+            left: 0,
+            height: 50,
+            width: 82,
             justifyContent: 'center',
             alignItems: 'center',
-            width: 32,
+            zIndex: 1,
         },
         bar: {
             width: 24,
@@ -74,14 +76,17 @@ export default function Navbar({
         title: {
             fontSize: 32,
             fontFamily: 'InstrumentSans_500Medium',
+            flex: 1,
+            textAlign: 'center',
+            zIndex: -1,
         },
         notificationButton: {
             position: 'absolute',
-            right: 16,
-            height: '100%',
+            right: 0,
+            height: 50,
+            width: 82,
             justifyContent: 'center',
             alignItems: 'center',
-            aspectRatio: 1,
         },
         notificationText: {
             position: 'absolute',
@@ -89,7 +94,7 @@ export default function Navbar({
             backgroundColor: 'red',
             borderRadius: 10,
             top: 2,
-            right: 2,
+            right: 18,
             width: 20,
             height: 20,
             lineHeight: 20,
@@ -101,7 +106,9 @@ export default function Navbar({
         <ThemedView style={styles.container}>
             <Pressable
                 style={styles.menuButton}
-                onPress={() => setHamburgerOpen(!hamburgerOpen)}>
+                onPress={() => {
+                    setHamburgerOpen(!hamburgerOpen);
+                }}>
                 <Animated.View
                     style={[
                         styles.bar,
@@ -138,7 +145,13 @@ export default function Navbar({
             <Pressable
                 style={styles.notificationButton}
                 onPress={onNotificationPress}>
-                <ThemedText style={styles.notificationText}>1</ThemedText>
+                {notificationCont > 0 ? (
+                    <ThemedText style={styles.notificationText}>
+                        {notificationCont}
+                    </ThemedText>
+                ) : (
+                    <></>
+                )}
                 <Ionicons name="notifications" size={32} color={theme.text} />
             </Pressable>
         </ThemedView>

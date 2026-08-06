@@ -35,7 +35,7 @@ async def cerate_group(
 
 
 @router.post("/invite")
-async def cerate_group(
+async def invite_user(
     formData: GroupInviteModel, currUser: User = Depends(getCurrentUser)
 ):
     group: Group = await getGroup(formData.groupID)
@@ -44,8 +44,38 @@ async def cerate_group(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Not the group owner"
         )
     inviteTarget = getUserFromEmail(formData.UserEmail)
-    if formData.groupID not in inviteTarget.Groups_invited:
+    if (
+        formData.groupID not in inviteTarget.Groups_invited
+        and formData.groupID not in inviteTarget.Groups_joined
+    ):
         inviteTarget.Groups_invited.append(formData.groupID)
     print(inviteTarget)
     await updateUserData(inviteTarget)
-    return {"message": "Invite sent", "ids": formData.UserEmail}
+    return {"message": "Invite sent", "id": formData.UserEmail}
+
+
+@router.get("/invite/accept")
+async def accept_invite(group_id: int, currUser: User = Depends(getCurrentUser)):
+    if group_id not in currUser.Groups_invited:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Invited to group"
+        )
+    currUser.Groups_invited.remove(group_id)
+    currUser.Groups_joined.append(group_id)
+    await updateUserData(currUser)
+    return {
+        "message": "Joined the group",
+    }
+
+
+@router.get("/invite/reject")
+async def reject_invite(group_id: int, currUser: User = Depends(getCurrentUser)):
+    if group_id not in currUser.Groups_invited:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not Invited to group"
+        )
+    currUser.Groups_invited.remove(group_id)
+    await updateUserData(currUser)
+    return {
+        "message": "Rejected the request",
+    }

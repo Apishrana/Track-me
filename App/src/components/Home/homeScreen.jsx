@@ -11,6 +11,7 @@ import Sidebar from './sidebar';
 export default function HomeScreen({ user }) {
     const [hamburgerOpen, setHamburgerOpen] = useState(false);
     const [visibleNotification, setVisibleNotification] = useState(false);
+    const [notificationCont, setNotificationCont] = useState(0);
     const { setLoading } = useLoading();
     const [groups, setGroups] = useState([]);
 
@@ -29,12 +30,10 @@ export default function HomeScreen({ user }) {
             });
             if (!res.ok) {
                 console.log(res);
-                setLoading(false);
                 return;
             }
             const response = await res.json();
             setGroups(response.Groups);
-            setLoading(false);
         };
         getGroup();
     }, []);
@@ -47,6 +46,7 @@ export default function HomeScreen({ user }) {
                 onNotificationPress={() => {
                     setVisibleNotification(true);
                 }}
+                notificationCont={notificationCont}
             />
             <ThemedView style={styles.container}>
                 <Hero
@@ -54,6 +54,8 @@ export default function HomeScreen({ user }) {
                     groups={groups}
                     visibleNotification={visibleNotification}
                     setVisibleNotification={setVisibleNotification}
+                    setNotificationCont={setNotificationCont}
+                    setLoading={setLoading}
                 />
                 <Sidebar
                     isOpen={hamburgerOpen}
@@ -62,7 +64,6 @@ export default function HomeScreen({ user }) {
                     setHamburgerOpen={setHamburgerOpen}
                 />
             </ThemedView>
-            <></>
         </ThemedView>
     );
 }
