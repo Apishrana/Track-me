@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from Dependencies.user import updateUserData
-from Dependencies.groups import createGroup, getGroup
+from Dependencies.groups import createGroup, getGroup, updateGroup
 from Models.groups import CreateGroupModel, Group, GroupInviteModel
 from Dependencies.auth import getCurrentUser, getUser, getUserFromEmail
 from Models.user import User
@@ -62,7 +62,10 @@ async def accept_invite(group_id: int, currUser: User = Depends(getCurrentUser))
         )
     currUser.Groups_invited.remove(group_id)
     currUser.Groups_joined.append(group_id)
+    group = await getGroup(group_id)
+    group.Users.append(currUser.User_id)
     await updateUserData(currUser)
+    await updateGroup(group)
     return {
         "message": "Joined the group",
     }
