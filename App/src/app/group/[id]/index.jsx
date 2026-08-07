@@ -21,6 +21,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useLoading } from '@/context/LoadingContext';
 import { useTheme } from '@/hooks/use-theme';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import { Image } from 'expo-image';
 
 export default function LocationScreen() {
@@ -41,7 +42,7 @@ export default function LocationScreen() {
     const spinAnimation = useRef(new Animated.Value(0)).current;
     const MAPTILER_KEY = process.env.EXPO_PUBLIC_MAPTILER_KEY;
     const markerSize = Math.max(
-        18,
+        horizontalScale(18),
         Math.min(60, 18 * Math.pow(1.15, zoom - 10)),
     );
     const dotSize = markerSize * 0.4;
@@ -190,13 +191,13 @@ export default function LocationScreen() {
             backgroundColor: theme.background,
         },
         userNav: {
-            height: 60,
+            height: verticalScale(60),
             borderColor: theme.borderColor,
             borderWidth: 1,
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingHorizontal: 16,
+            paddingHorizontal: horizontalScale(16),
         },
         userNavText: {
             flex: 0,
@@ -262,8 +263,8 @@ export default function LocationScreen() {
                             <ThemedText
                                 numberOfLines={1}
                                 style={{
-                                    fontSize: 24,
-                                    lineHeight: 28,
+                                    fontSize: fontScale(24),
+                                    lineHeight: verticalScale(28),
                                     fontFamily: 'InstrumentSans_500Medium',
                                 }}>
                                 Tracking:{' '}
@@ -276,7 +277,7 @@ export default function LocationScreen() {
                             <ThemedText
                                 numberOfLines={1}
                                 style={{
-                                    fontSize: 16,
+                                    fontSize: fontScale(16),
                                     color: theme.textSecondary,
                                     fontFamily: 'InstrumentSans_500Medium',
                                 }}>
@@ -302,15 +303,15 @@ export default function LocationScreen() {
                             }}>
                             <Animated.View
                                 style={{
-                                    width: 32,
-                                    height: 32,
+                                    width: horizontalScale(32),
+                                    aspectRatio: 1,
                                     alignItems: 'center',
                                     justifyContent: 'center',
                                     transform: [{ rotate: spinInterpolation }],
                                 }}>
                                 <Ionicons
                                     name="reload"
-                                    size={32}
+                                    size={horizontalScale(32)}
                                     color={theme.text}
                                 />
                             </Animated.View>
@@ -356,18 +357,18 @@ function UserTemplate({ user, theme, selected, onPress }) {
     const tickerDuration = Math.max(2500, user.Name.length * 110);
     const styles = StyleSheet.create({
         container: {
-            height: 60,
-            paddingVertical: 10,
+            height: verticalScale(60),
+            paddingVertical: verticalScale(10),
             borderWidth: selected ? 2 : 1,
             borderColor: selected ? theme.borderColor : theme.borderColorLight,
             flex: 0,
             flexDirection: 'row',
             alignItems: 'center',
-            paddingRight: 16,
+            paddingRight: horizontalScale(16),
         },
         userIconContainer: {
-            height: 60,
-            width: 60,
+            height: verticalScale(60),
+            aspectRatio: 1,
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
@@ -375,21 +376,21 @@ function UserTemplate({ user, theme, selected, onPress }) {
         },
         textContainer: {
             flex: 1,
-            marginLeft: 20,
+            marginLeft: horizontalScale(20),
         },
         userIcon: {
-            height: 45,
-            width: 45,
-            borderRadius: 23,
+            height: verticalScale(45),
+            aspectRatio: 1,
+            borderRadius: horizontalScale(23),
             backgroundColor: '#ffff00',
             borderWidth: 1,
             borderColor: theme.borderColor,
-            marginLeft: 10,
+            marginLeft: horizontalScale(10),
         },
         nameText: {
             fontFamily: 'InstrumentSans_500Medium',
-            fontSize: 24,
-            lineHeight: 30,
+            fontSize: fontScale(24),
+            lineHeight: verticalScale(30),
             backgroundColor: '#ffffff00',
             color: theme.text,
         },

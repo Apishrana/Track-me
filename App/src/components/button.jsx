@@ -1,3 +1,4 @@
+import { fontScale, horizontalScale } from '@/utils/scale';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 export default function Button({
@@ -11,15 +12,15 @@ export default function Button({
     const styles = StyleSheet.create({
         button: {
             backgroundColor: '#007AFF',
-            padding: 14,
-            borderRadius: 8,
+            padding: horizontalScale(14),
+            borderRadius: horizontalScale(8),
             alignItems: 'center',
             justifyContent: 'center',
         },
         buttonText: {
             color: 'white',
             fontWeight: '600',
-            fontSize: 16,
+            fontSize: fontScale(16),
         },
     });
 

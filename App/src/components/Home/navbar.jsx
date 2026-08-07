@@ -4,6 +4,7 @@ import { Animated, Easing, Pressable, StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
 export default function Navbar({
@@ -34,11 +35,11 @@ export default function Navbar({
     });
     const topTranslate = rotation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 8],
+        outputRange: [0, verticalScale(8)],
     });
     const bottomTranslate = rotation.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, -8],
+        outputRange: [0, horizontalScale(-8)],
     });
     const middleOpacity = rotation.interpolate({
         inputRange: [0, 1],
@@ -51,7 +52,7 @@ export default function Navbar({
             justifyContent: 'center',
             position: 'relative',
             alignItems: 'center',
-            height: 50,
+            height: verticalScale(50),
             borderBottomWidth: 1,
             borderColor: theme.borderColorLight,
             zIndex: 10,
@@ -60,21 +61,21 @@ export default function Navbar({
         menuButton: {
             position: 'absolute',
             left: 0,
-            height: 50,
-            width: 82,
+            height: '100%',
+            width: horizontalScale(82),
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 1,
         },
         bar: {
-            width: 24,
-            height: 2.5,
+            width: horizontalScale(24),
+            height: verticalScale(2.5),
             backgroundColor: theme.text,
             borderRadius: 2,
             marginVertical: 3,
         },
         title: {
-            fontSize: 32,
+            fontSize: fontScale(32),
             fontFamily: 'InstrumentSans_500Medium',
             flex: 1,
             textAlign: 'center',
@@ -83,20 +84,20 @@ export default function Navbar({
         notificationButton: {
             position: 'absolute',
             right: 0,
-            height: 50,
-            width: 82,
+            height: '100%',
+            width: horizontalScale(82),
             justifyContent: 'center',
             alignItems: 'center',
         },
         notificationText: {
             position: 'absolute',
-            fontStyle: 5,
+            // fontSize: fontScale(5),
             backgroundColor: 'red',
-            borderRadius: 10,
-            top: 2,
-            right: 18,
-            width: 20,
-            height: 20,
+            borderRadius: horizontalScale(10),
+            top: verticalScale(2),
+            right: horizontalScale(18),
+            width: horizontalScale(20),
+            aspectRatio: 1,
             lineHeight: 20,
             textAlign: 'center',
         },
@@ -152,7 +153,11 @@ export default function Navbar({
                 ) : (
                     <></>
                 )}
-                <Ionicons name="notifications" size={32} color={theme.text} />
+                <Ionicons
+                    name="notifications"
+                    size={horizontalScale(32)}
+                    color={theme.text}
+                />
             </Pressable>
         </ThemedView>
     );

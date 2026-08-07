@@ -2,6 +2,7 @@ import Navbar from '@/components/Setting/navbar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import { Camera, Map } from '@maplibre/maplibre-react-native';
 import { Picker } from '@react-native-picker/picker';
 import * as SecureStore from 'expo-secure-store';
@@ -17,16 +18,15 @@ export default function MapTypeSelection() {
             flex: 1,
         },
         title: {
-            fontSize: 28,
-            marginBottom: 10,
-            height: 32,
+            fontSize: fontScale(28),
+            marginBottom: verticalScale(10),
+            height: verticalScale(32),
         },
         map: {
-            // flex: 1,
-            marginTop: 30,
+            marginTop: verticalScale(30),
             width: '100%',
             aspectRatio: 1,
-            padding: 10,
+            padding: horizontalScale(10),
         },
     });
     useEffect(() => {
@@ -43,14 +43,14 @@ export default function MapTypeSelection() {
     return (
         <ThemedView style={styles.container}>
             <Navbar backUrl={'/setting'} />
-            <ThemedView style={{ padding: 20 }}>
+            <ThemedView style={{ padding: horizontalScale(20) }}>
                 <ThemedText style={styles.title}>Set Map style</ThemedText>
 
                 <ThemedView
                     style={{
                         borderColor: theme.borderColor,
                         borderWidth: 1,
-                        marginTop: 10,
+                        marginTop: verticalScale(10),
                     }}>
                     <Picker
                         selectedValue={selectedMapStyle}
@@ -62,7 +62,7 @@ export default function MapTypeSelection() {
                             label="Street (default)"
                             value={'streets-v4'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -70,7 +70,7 @@ export default function MapTypeSelection() {
                             label="Satellite"
                             value={'hybrid-v4'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -78,7 +78,7 @@ export default function MapTypeSelection() {
                             label="Topographic"
                             value={'topo-v4'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -86,7 +86,7 @@ export default function MapTypeSelection() {
                             label="Openstreetmap (OpenSourceMap)"
                             value={'openstreetmap'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -94,7 +94,7 @@ export default function MapTypeSelection() {
                             label="Outdoor"
                             value={'outdoor-v4'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -102,7 +102,7 @@ export default function MapTypeSelection() {
                             label="Toner"
                             value={'toner-v2'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -110,7 +110,7 @@ export default function MapTypeSelection() {
                             label="Landscape"
                             value={'landscape-v4'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />
@@ -118,7 +118,7 @@ export default function MapTypeSelection() {
                             label="Backdrop"
                             value={'backdrop-v4'}
                             style={{
-                                fontSize: 20,
+                                fontSize: fontScale(20),
                                 color: theme.text,
                             }}
                         />

@@ -7,11 +7,12 @@ import Navbar from '@/components/Setting/navbar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import { router } from 'expo-router';
 
 export default function UpdatePassword() {
-    const [oldPass, setOldPass] = useState(null);
-    const [newPass, setNewPass] = useState(null);
+    const [oldPass, setOldPass] = useState('');
+    const [newPass, setNewPass] = useState('');
     const [btnPressed, setBtnPressed] = useState(false);
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
@@ -35,6 +36,7 @@ export default function UpdatePassword() {
         if (!res.ok) {
             ToastAndroid.show('Password Update Failed!', ToastAndroid.SHORT);
             console.log(res);
+            setBtnPressed(false);
             return;
         }
         console.log(await res.json());
@@ -48,16 +50,16 @@ export default function UpdatePassword() {
             flex: 1,
         },
         title: {
-            fontSize: 28,
-            marginBottom: 10,
-            height: 32,
+            fontSize: fontScale(28),
+            marginBottom: verticalScale(10),
+            height: verticalScale(32),
         },
         input: {
             borderWidth: 1,
             borderColor: '#ccc',
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 15,
+            borderRadius: horizontalScale(8),
+            padding: horizontalScale(12),
+            marginBottom: verticalScale(15),
         },
     });
 
@@ -66,7 +68,7 @@ export default function UpdatePassword() {
             <Navbar backUrl={'/setting'} />
             <ThemedView
                 style={{
-                    padding: 20,
+                    padding: horizontalScale(20),
                 }}>
                 <ThemedText style={styles.title}>Update Password</ThemedText>
                 <ThemedTextInput

@@ -7,16 +7,17 @@ import { router } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, ScrollView, StyleSheet } from 'react-native';
 
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import { ThemedText } from '../themed-text';
 import { ThemedView } from '../themed-view';
 
 export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
-    const translateX = useRef(new Animated.Value(-300)).current;
+    const translateX = useRef(new Animated.Value(verticalScale(-300))).current;
 
     const theme = useTheme();
     useEffect(() => {
         Animated.timing(translateX, {
-            toValue: isOpen ? 0 : -400,
+            toValue: isOpen ? 0 : verticalScale(-400),
             duration: isOpen ? 300 : 180,
             useNativeDriver: true,
         }).start();
@@ -43,8 +44,8 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
             boxShadow: `4px 0px 8px ${theme.shadow}`,
         },
         settingContainer: {
-            height: 50,
-            paddingVertical: 10,
+            height: verticalScale(50),
+            paddingVertical: verticalScale(10),
             borderTopWidth: 1,
             borderColor: theme.borderColorLight,
             flex: 0,
@@ -52,8 +53,8 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
             alignItems: 'center',
         },
         userContainer: {
-            height: 50,
-            paddingVertical: 10,
+            height: verticalScale(50),
+            paddingVertical: verticalScale(10),
             borderTopWidth: 1,
             borderColor: theme.borderColor,
             flex: 0,
@@ -61,9 +62,9 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
             alignItems: 'center',
         },
         iconContainer: {
-            height: 50,
-            width: 50,
-            marginRight: 15,
+            height: '100%',
+            aspectRatio: 1,
+            marginRight: horizontalScale(15),
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
@@ -71,26 +72,26 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
         },
         nameText: {
             fontFamily: 'InstrumentSans_600SemiBold',
-            fontSize: 24,
-            lineHeight: 30,
+            fontSize: fontScale(24),
+            lineHeight: verticalScale(30),
             includeFontPadding: false,
             flex: 1,
         },
         settingText: {
             fontFamily: 'InstrumentSans_500Medium',
-            fontSize: 20,
-            lineHeight: 26,
+            fontSize: fontScale(20),
+            lineHeight: verticalScale(26),
             includeFontPadding: false,
             flex: 1,
         },
         userIcon: {
-            height: 45,
-            width: 45,
-            borderRadius: 23,
+            height: verticalScale(45),
+            aspectRatio: 1,
+            borderRadius: verticalScale(23),
         },
         settingIcon: {
-            height: 35,
-            width: 35,
+            height: verticalScale(35),
+            aspectRatio: 1,
         },
     });
 
@@ -110,10 +111,13 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
                         router.push(`/setting`);
                     }}>
                     <ThemedView
-                        style={[styles.iconContainer, { marginRight: 5 }]}>
+                        style={[
+                            styles.iconContainer,
+                            { marginRight: horizontalScale(5) },
+                        ]}>
                         <Feather
                             name="settings"
-                            size={35}
+                            size={horizontalScale(35)}
                             style={styles.settingIcon}
                             color={theme.text}
                         />
@@ -121,13 +125,7 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
                     <ThemedText style={styles.settingText}>Settings</ThemedText>
                 </Pressable>
                 <ThemedView style={styles.userContainer}>
-                    <ThemedView
-                        style={[
-                            styles.iconContainer,
-                            {
-                                marginLeft: 0,
-                            },
-                        ]}>
+                    <ThemedView style={[styles.iconContainer]}>
                         <Image style={styles.userIcon} />
                     </ThemedView>
                     <ThemedText style={styles.nameText}>{user.Name}</ThemedText>
@@ -183,7 +181,7 @@ function GroupTab({ theme, groups }) {
             flex: 1,
         },
         headingContainer: {
-            height: 50,
+            height: verticalScale(50),
             borderBottomWidth: 1,
             borderColor: theme.borderColorLight,
             zIndex: 10,
@@ -201,11 +199,11 @@ function GroupTab({ theme, groups }) {
         },
         groupContainer: {
             flex: 1,
-            marginLeft: 30,
+            marginLeft: horizontalScale(30),
         },
         icon: {
-            width: 70,
-            height: 50,
+            width: horizontalScale(70),
+            height: '100%',
             backgroundColor: '#00000000',
             flex: 0,
             alignItems: 'center',
@@ -213,27 +211,27 @@ function GroupTab({ theme, groups }) {
         },
         groupsText: {
             fontFamily: 'InstrumentSans_500Medium',
-            fontSize: 20,
+            fontSize: fontScale(20),
             flex: 1,
         },
         arrowIconContainer: {
             backgroundColor: '#00000000',
-            height: 50,
+            height: verticalScale(50),
             flex: 1,
             flexDirection: 'row-reverse',
         },
         arrowIcon: {
             backgroundColor: '#00000000',
-            height: 50,
-            width: 24,
-            marginRight: 11,
+            height: '100%',
+            width: horizontalScale(24),
+            marginRight: horizontalScale(11),
             flex: 0,
             justifyContent: 'center',
         },
         arrowIconImage: {
             backgroundColor: '#00000000',
-            width: 24,
-            height: 24,
+            width: horizontalScale(24),
+            aspectRatio: 1,
         },
     });
 
@@ -248,10 +246,10 @@ function GroupTab({ theme, groups }) {
                     <FontAwesome
                         name="group"
                         style={{
-                            width: 50,
-                            height: 35,
+                            width: horizontalScale(50),
+                            height: verticalScale(35),
                         }}
-                        size={35}
+                        size={horizontalScale(35)}
                         color={theme.text}
                     />
                 </ThemedView>
@@ -274,7 +272,7 @@ function GroupTab({ theme, groups }) {
                             ]}>
                             <AntDesign
                                 name="left"
-                                size={24}
+                                size={horizontalScale(24)}
                                 color={theme.text}
                             />
                         </Animated.View>
@@ -293,7 +291,7 @@ function GroupTab({ theme, groups }) {
                             {
                                 translateY: openAnimation.interpolate({
                                     inputRange: [0, 1],
-                                    outputRange: [-150, 0],
+                                    outputRange: [verticalScale(-150), 0],
                                 }),
                             },
                         ],
@@ -320,7 +318,7 @@ function GroupTab({ theme, groups }) {
 function GroupTemplate({ group, theme }) {
     const styles = StyleSheet.create({
         container: {
-            height: 50,
+            height: verticalScale(50),
             flex: 0,
             flexDirection: 'row',
             alignItems: 'center',
@@ -329,18 +327,18 @@ function GroupTemplate({ group, theme }) {
             borderColor: theme.borderColorLight,
         },
         imageContainer: {
-            height: 50,
-            width: 50,
-            marginRight: 10,
+            height: '100%',
+            aspectRatio: 1,
+            marginRight: horizontalScale(10),
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#ffffff00',
         },
         image: {
-            height: 40,
-            width: 40,
-            borderRadius: 20,
+            height: verticalScale(40),
+            aspectRatio: 1,
+            borderRadius: horizontalScale(20),
             borderWidth: 1,
             borderColor: theme.borderColor,
             backgroundColor: 'rgb(219, 217, 82)',
@@ -348,18 +346,18 @@ function GroupTemplate({ group, theme }) {
         infoContainer: {
             justifyContent: 'center',
             flex: 1,
-            height: 50,
+            height: '100%',
             backgroundColor: '#ffffff00',
         },
         groupName: {
             fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 15,
-            marginRight: 10,
+            fontSize: fontScale(15),
+            marginRight: horizontalScale(10),
         },
         userName: {
             fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 14,
-            marginRight: 10,
+            fontSize: fontScale(14),
+            marginRight: horizontalScale(10),
         },
     });
     return (

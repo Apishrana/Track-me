@@ -1,3 +1,4 @@
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import * as SecureStore from 'expo-secure-store';
 import { useState } from 'react';
 import { Modal, Pressable, StyleSheet } from 'react-native';
@@ -6,7 +7,7 @@ import { ThemedTextInput } from '../themed-text-input';
 import { ThemedView } from '../themed-view';
 
 export default function AddUserModal({ theme, visible, onClose, groupID }) {
-    const [name, setName] = useState(null);
+    const [name, setName] = useState('');
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -46,7 +47,7 @@ export default function AddUserModal({ theme, visible, onClose, groupID }) {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingHorizontal: 24,
+            paddingHorizontal: horizontalScale(24),
             backgroundColor: '#00000060',
         },
         overlay: {
@@ -56,43 +57,43 @@ export default function AddUserModal({ theme, visible, onClose, groupID }) {
         popup: {
             backgroundColor: theme.background,
             width: '100%',
-            borderRadius: 16,
+            borderRadius: horizontalScale(16),
             borderWidth: 1,
             borderColor: theme.borderColor,
             zIndex: 20,
         },
         cancel: {
-            height: 50,
+            height: verticalScale(50),
             justifyContent: 'center',
             alignItems: 'center',
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderRadius: 16,
-            marginTop: 5,
+            borderRadius: horizontalScale(16),
+            marginTop: verticalScale(5),
         },
         cancelText: {
-            fontSize: 20,
+            fontSize: fontScale(20),
             fontFamily: 'InstrumentSans_600SemiBold',
             color: theme.textSecondary,
         },
         title: {
-            paddingVertical: 15,
-            fontSize: 22,
-            lineHeight: 26,
+            paddingVertical: verticalScale(15),
+            fontSize: fontScale(22),
+            lineHeight: verticalScale(26),
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
+            borderTopLeftRadius: horizontalScale(16),
+            borderTopRightRadius: horizontalScale(16),
             textAlign: 'center',
             fontFamily: 'InstrumentSans_600SemiBold',
         },
         input: {
-            marginTop: 16,
+            marginTop: verticalScale(16),
             borderWidth: 1,
             borderColor: '#ccc',
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 15,
+            borderRadius: horizontalScale(8),
+            padding: horizontalScale(12),
+            marginBottom: verticalScale(15),
             width: '90%',
             marginLeft: 'auto',
             marginRight: 'auto',

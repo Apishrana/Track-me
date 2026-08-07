@@ -1,4 +1,5 @@
 import { useTheme } from '@/hooks/use-theme';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import Entypo from '@expo/vector-icons/Entypo';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -27,24 +28,24 @@ export default function Hero({
         },
         container: {
             flex: 1,
-            marginLeft: 30,
-            marginRight: 30,
-            marginTop: 50,
+            marginLeft: horizontalScale(30),
+            marginRight: horizontalScale(30),
+            marginTop: verticalScale(50),
         },
         nameText: {
-            fontSize: 35,
-            height: 32,
+            fontSize: fontScale(35),
+            height: verticalScale(32),
             fontFamily: 'InstrumentSans_500Medium',
-            marginBottom: 5,
+            marginBottom: verticalScale(5),
         },
         selectGroupText: {
-            fontSize: 26,
+            fontSize: fontScale(26),
             fontFamily: 'InstrumentSans_500Medium',
             flex: 1,
         },
         groupContainer: {
-            marginTop: 15,
-            gap: 8,
+            marginTop: verticalScale(15),
+            gap: verticalScale(8),
             flex: 1,
         },
     });
@@ -55,11 +56,11 @@ export default function Hero({
                 <ThemedText style={styles.nameText}>{user.Name}</ThemedText>
                 <ThemedView
                     style={{
-                        marginTop: 20,
+                        marginTop: verticalScale(20),
                         flexDirection: 'row',
                         justifyContent: 'space-between',
                         alignItems: 'center',
-                        height: 40,
+                        height: verticalScale(40),
                     }}>
                     <ThemedText style={styles.selectGroupText}>
                         Select a Group
@@ -76,7 +77,7 @@ export default function Hero({
                         }}>
                         <MaterialIcons
                             name="group-add"
-                            size={26}
+                            size={horizontalScale(26)}
                             color={theme.text}
                         />
                     </Pressable>
@@ -110,7 +111,7 @@ function GroupTemplate({ group }) {
     const theme = useTheme();
     const styles = StyleSheet.create({
         container: {
-            height: 70,
+            height: verticalScale(70),
             flex: 0,
             flexDirection: 'row',
             alignItems: 'center',
@@ -118,18 +119,18 @@ function GroupTemplate({ group }) {
             borderColor: theme.borderColor,
         },
         imageContainer: {
-            height: 70,
-            width: 70,
-            marginRight: 20,
+            height: '100%',
+            aspectRatio: 1,
+            marginRight: horizontalScale(20),
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#ffffff00',
         },
         image: {
-            height: 50,
-            width: 50,
-            borderRadius: 25,
+            height: verticalScale(50),
+            aspectRatio: 1,
+            borderRadius: horizontalScale(25),
             borderWidth: 1,
             borderColor: theme.borderColor,
             backgroundColor: '#f00',
@@ -137,18 +138,18 @@ function GroupTemplate({ group }) {
         infoContainer: {
             justifyContent: 'center',
             flex: 1,
-            height: 70,
+            height: '100%',
             backgroundColor: '#ffffff00',
         },
         groupName: {
             fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 22,
-            marginRight: 15,
+            fontSize: fontScale(22),
+            marginRight: horizontalScale(15),
         },
         userName: {
             fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 20,
-            marginRight: 15,
+            fontSize: fontScale(20),
+            marginRight: horizontalScale(15),
         },
     });
     return (
@@ -217,7 +218,7 @@ function CreateGroupPopup({ theme, visible, onClose }) {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingHorizontal: 24,
+            paddingHorizontal: horizontalScale(24),
             backgroundColor: '#00000060',
         },
         overlay: {
@@ -227,43 +228,43 @@ function CreateGroupPopup({ theme, visible, onClose }) {
         popup: {
             backgroundColor: theme.background,
             width: '100%',
-            borderRadius: 16,
+            borderRadius: horizontalScale(16),
             borderWidth: 1,
             borderColor: theme.borderColor,
             zIndex: 20,
         },
         cancel: {
-            height: 50,
+            height: verticalScale(50),
             justifyContent: 'center',
             alignItems: 'center',
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderRadius: 16,
-            marginTop: 5,
+            borderRadius: horizontalScale(16),
+            marginTop: verticalScale(5),
         },
         cancelText: {
-            fontSize: 20,
+            fontSize: fontScale(20),
             fontFamily: 'InstrumentSans_600SemiBold',
             color: theme.textSecondary,
         },
         title: {
-            paddingVertical: 15,
-            fontSize: 22,
-            lineHeight: 26,
+            paddingVertical: verticalScale(15),
+            fontSize: fontScale(22),
+            lineHeight: verticalScale(26),
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
+            borderTopLeftRadius: horizontalScale(16),
+            borderTopRightRadius: horizontalScale(16),
             textAlign: 'center',
             fontFamily: 'InstrumentSans_600SemiBold',
         },
         input: {
-            marginTop: 16,
+            marginTop: verticalScale(16),
             borderWidth: 1,
             borderColor: '#ccc',
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 15,
+            borderRadius: horizontalScale(8),
+            padding: horizontalScale(12),
+            marginBottom: verticalScale(15),
             width: '90%',
             marginLeft: 'auto',
             marginRight: 'auto',
@@ -314,7 +315,7 @@ function Notification({
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingHorizontal: 24,
+            paddingHorizontal: horizontalScale(24),
             backgroundColor: '#00000060',
         },
         overlay: {
@@ -324,33 +325,33 @@ function Notification({
         popup: {
             backgroundColor: theme.background,
             width: '100%',
-            borderRadius: 16,
+            borderRadius: horizontalScale(16),
             borderWidth: 1,
             borderColor: theme.borderColor,
             zIndex: 20,
         },
         cancel: {
-            height: 50,
+            height: verticalScale(50),
             justifyContent: 'center',
             alignItems: 'center',
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderRadius: 16,
-            marginTop: 5,
+            borderRadius: horizontalScale(16),
+            marginTop: verticalScale(5),
         },
         cancelText: {
-            fontSize: 20,
+            fontSize: fontScale(20),
             fontFamily: 'InstrumentSans_600SemiBold',
             color: theme.textSecondary,
         },
         title: {
-            paddingVertical: 15,
-            fontSize: 22,
-            lineHeight: 26,
+            paddingVertical: verticalScale(15),
+            fontSize: fontScale(22),
+            lineHeight: verticalScale(26),
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
+            borderTopLeftRadius: horizontalScale(16),
+            borderTopRightRadius: horizontalScale(16),
             textAlign: 'center',
             fontFamily: 'InstrumentSans_600SemiBold',
         },
@@ -453,7 +454,7 @@ function GroupInviteTemplate({ group }) {
 
     const styles = StyleSheet.create({
         container: {
-            height: 60,
+            height: verticalScale(60),
             flex: 0,
             flexDirection: 'row',
             alignItems: 'center',
@@ -461,18 +462,18 @@ function GroupInviteTemplate({ group }) {
             borderColor: theme.borderColor,
         },
         imageContainer: {
-            height: 60,
-            width: 60,
-            marginRight: 10,
+            height: '100%',
+            aspectRatio: 1,
+            marginRight: horizontalScale(10),
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#ffffff00',
         },
         image: {
-            height: 40,
-            width: 40,
-            borderRadius: 20,
+            height: verticalScale(40),
+            aspectRatio: 1,
+            borderRadius: horizontalScale(20),
             borderWidth: 1,
             borderColor: theme.borderColor,
             backgroundColor: '#f00',
@@ -480,33 +481,31 @@ function GroupInviteTemplate({ group }) {
         infoContainer: {
             justifyContent: 'center',
             flex: 1,
-            height: 60,
+            height: '100%',
             backgroundColor: '#ffffff00',
-            marginRight: 10,
+            marginRight: horizontalScale(10),
         },
         groupName: {
             fontFamily: 'InstrumentSans_500Medium',
-            fontSize: 16,
-            marginRight: 0,
+            fontSize: fontScale(16),
         },
         userName: {
             fontFamily: 'InstrumentSans_400Regular',
-            fontSize: 14,
-            marginRight: 0,
+            fontSize: fontScale(14),
         },
         buttonContainer: {
-            gap: 5,
-            width: 85,
-            height: 40,
-            marginRight: 10,
+            gap: horizontalScale(5),
+            width: horizontalScale(85),
+            height: verticalScale(40),
+            marginRight: horizontalScale(10),
             flexDirection: 'row',
         },
         button: {
-            height: 40,
-            width: 40,
+            height: verticalScale(40),
+            aspectRatio: 1,
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: 5,
+            borderRadius: horizontalScale(5),
             borderWidth: 1,
             borderColor: theme.borderColorLight,
         },
@@ -532,10 +531,18 @@ function GroupInviteTemplate({ group }) {
             </ThemedView>
             <ThemedView style={styles.buttonContainer}>
                 <Pressable style={styles.button} onPress={RejectGroup}>
-                    <Entypo name="cross" size={35} color={theme.text} />
+                    <Entypo
+                        name="cross"
+                        size={horizontalScale(35)}
+                        color={theme.text}
+                    />
                 </Pressable>
                 <Pressable style={styles.button} onPress={JoinGroup}>
-                    <FontAwesome5 name="check" size={25} color={theme.text} />
+                    <FontAwesome5
+                        name="check"
+                        size={horizontalScale(25)}
+                        color={theme.text}
+                    />
                 </Pressable>
             </ThemedView>
         </ThemedView>

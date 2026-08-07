@@ -7,10 +7,11 @@ import Navbar from '@/components/Setting/navbar';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedTextInput } from '@/components/themed-text-input';
 import { ThemedView } from '@/components/themed-view';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import { router } from 'expo-router';
 
 export default function UpdateEmail() {
-    const [email, setEmail] = useState(null);
+    const [email, setEmail] = useState('');
     const [btnPressed, setBtnPressed] = useState(false);
 
     const apiUrl = process.env.EXPO_PUBLIC_BACKEND_URL;
@@ -46,16 +47,16 @@ export default function UpdateEmail() {
             flex: 1,
         },
         title: {
-            fontSize: 28,
-            marginBottom: 10,
-            height: 32,
+            fontSize: fontScale(28),
+            marginBottom: verticalScale(10),
+            height: verticalScale(32),
         },
         input: {
             borderWidth: 1,
             borderColor: '#ccc',
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 15,
+            borderRadius: horizontalScale(8),
+            padding: horizontalScale(12),
+            marginBottom: verticalScale(15),
         },
     });
 
@@ -64,7 +65,7 @@ export default function UpdateEmail() {
             <Navbar backUrl={'/setting'} />
             <ThemedView
                 style={{
-                    padding: 20,
+                    padding: horizontalScale(20),
                 }}>
                 <ThemedText style={styles.title}>Update Email</ThemedText>
                 <ThemedTextInput

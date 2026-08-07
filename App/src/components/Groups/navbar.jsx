@@ -1,5 +1,6 @@
 import { ThemedView } from '@/components/themed-view';
 import { useTheme } from '@/hooks/use-theme';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -15,19 +16,19 @@ export default function Navbar({ groupName, groupOwner, onUserButtonPress }) {
             flexDirection: 'row',
             position: 'relative',
             alignItems: 'center',
-            gap: 20,
-            height: 60,
+            gap: horizontalScale(20),
+            height: verticalScale(60),
             borderBottomWidth: 1,
             borderColor: theme.borderColorLight,
             zIndex: 10,
             backgroundColor: theme.background,
         },
         backButton: {
-            marginLeft: 16,
+            marginLeft: horizontalScale(16),
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            width: 32,
+            width: horizontalScale(32),
         },
         titleWrapper: {
             flex: 1,
@@ -35,18 +36,17 @@ export default function Navbar({ groupName, groupOwner, onUserButtonPress }) {
             overflow: 'hidden',
         },
         title: {
-            fontSize: 32,
-            lineHeight: 38,
+            fontSize: fontScale(32),
+            lineHeight: verticalScale(38),
             fontFamily: 'InstrumentSans_600SemiBold',
             color: theme.text,
         },
         addUserButton: {
-            marginRight: 16,
-            // marginLeft: 'auto',
+            marginRight: horizontalScale(16),
             height: '100%',
             justifyContent: 'center',
             alignItems: 'center',
-            width: 32,
+            width: horizontalScale(32),
         },
     });
 
@@ -57,7 +57,7 @@ export default function Navbar({ groupName, groupOwner, onUserButtonPress }) {
                 onPress={() => router.push('/')}>
                 <Ionicons
                     name="arrow-back-outline"
-                    size={32}
+                    size={horizontalScale(32)}
                     color={theme.text}
                 />
             </Pressable>
@@ -82,7 +82,7 @@ export default function Navbar({ groupName, groupOwner, onUserButtonPress }) {
                     onPress={onUserButtonPress}>
                     <MaterialIcons
                         name="person-add"
-                        size={32}
+                        size={horizontalScale(32)}
                         color={theme.text}
                     />
                 </Pressable>

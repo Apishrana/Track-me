@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { StyleSheet } from 'react-native';
 
 import { useTheme } from '@/hooks/use-theme';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 import Button from '../button';
 import { ThemedText } from '../themed-text';
 import { ThemedTextInput } from '../themed-text-input';
@@ -58,20 +59,20 @@ export default function Signup({ setLoginMode, loadUser }) {
         container: {
             flex: 1,
             justifyContent: 'center',
-            padding: 20,
+            padding: horizontalScale(20),
         },
         title: {
-            fontSize: 32,
+            fontSize: fontScale(32),
             fontWeight: 'bold',
-            marginBottom: 10,
-            height: 32,
+            marginBottom: verticalScale(10),
+            height: verticalScale(32),
         },
         input: {
             borderWidth: 1,
             borderColor: '#ccc',
-            borderRadius: 8,
-            padding: 12,
-            marginBottom: 15,
+            borderRadius: horizontalScale(8),
+            padding: horizontalScale(12),
+            marginBottom: verticalScale(15),
         },
         loginText: {
             textAlign: 'center',

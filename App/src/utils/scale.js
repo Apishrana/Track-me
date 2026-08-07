@@ -2,8 +2,8 @@ import { Dimensions, PixelRatio } from 'react-native';
 
 const { height, width } = Dimensions.get('window');
 
-const baseHeight = 0;
-const baseWidth = 0;
+const baseHeight = 1080;
+const baseWidth = 1920;
 
 export const verticalScale = (size) => {
     (height / baseHeight) * size;

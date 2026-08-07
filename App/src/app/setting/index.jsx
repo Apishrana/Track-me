@@ -18,6 +18,7 @@ import ColorPicker, {
 } from 'reanimated-color-picker';
 
 import Navbar from '@/components/Setting/navbar';
+import { fontScale, horizontalScale, verticalScale } from '@/utils/scale';
 
 export default function Setting() {
     const theme = useTheme();
@@ -47,7 +48,7 @@ export default function Setting() {
                                 },
                                 <FontAwesome5
                                     name="user-edit"
-                                    size={20}
+                                    size={horizontalScale(20)}
                                     color={theme.text}
                                 />,
                             ],
@@ -58,7 +59,7 @@ export default function Setting() {
                                 },
                                 <FontAwesome5
                                     name="user-edit"
-                                    size={20}
+                                    size={horizontalScale(20)}
                                     color={theme.text}
                                 />,
                             ],
@@ -69,7 +70,7 @@ export default function Setting() {
                                 },
                                 <MaterialCommunityIcons
                                     name="email-edit"
-                                    size={26}
+                                    size={horizontalScale(26)}
                                     color={theme.text}
                                 />,
                             ],
@@ -84,7 +85,7 @@ export default function Setting() {
                                 () => setPopup('markerColor'),
                                 <FontAwesome5
                                     name="map-marker"
-                                    size={20}
+                                    size={horizontalScale(20)}
                                     color={theme.text}
                                 />,
                             ],
@@ -93,7 +94,7 @@ export default function Setting() {
                                 () => setPopup('theme'),
                                 <MaterialCommunityIcons
                                     name="theme-light-dark"
-                                    size={24}
+                                    size={horizontalScale(24)}
                                     color={theme.text}
                                 />,
                             ],
@@ -102,7 +103,7 @@ export default function Setting() {
                                 () => router.push('/setting/Customization/map'),
                                 <FontAwesome
                                     name="map"
-                                    size={20}
+                                    size={horizontalScale(20)}
                                     color={theme.text}
                                 />,
                             ],
@@ -145,10 +146,10 @@ function SettingSection({ theme, tittle, settings }) {
         },
         text: {
             fontFamily: 'InstrumentSans_600SemiBold',
-            paddingTop: 25,
-            paddingBottom: 5,
-            paddingLeft: 15,
-            fontSize: 18,
+            paddingTop: verticalScale(25),
+            paddingBottom: verticalScale(5),
+            paddingLeft: horizontalScale(15),
+            fontSize: fontScale(18),
             color: theme.textSecondary,
             borderBottomWidth: 1,
             borderBottomColor: theme.borderColorLight,
@@ -173,35 +174,35 @@ function SettingTemplate({ theme, tittle, onPress, icon }) {
     const styles = StyleSheet.create({
         container: {
             flex: 0,
-            height: 50,
+            height: verticalScale(50),
             flexDirection: 'row',
             backgroundColor: theme.background,
             borderBottomWidth: 1,
             borderBottomColor: theme.borderColorLight,
         },
         tittleContainer: {
-            height: 50,
+            height: '100%',
             flex: 1,
             flexDirection: 'row',
             alignItems: 'center',
             backgroundColor: '#00000000',
         },
         iconContainer: {
-            height: 50,
-            width: 60,
+            height: '100%',
+            width: horizontalScale(60),
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
             backgroundColor: '#00000000',
         },
         tittleText: {
-            fontSize: 22,
-            lineHeight: 24,
+            fontSize: fontScale(22),
+            lineHeight: verticalScale(24),
             fontFamily: 'InstrumentSans_500Medium',
         },
         arrow: {
-            height: 50,
-            width: 60,
+            height: '100%',
+            width: horizontalScale(60),
             flex: 0,
             alignItems: 'center',
             justifyContent: 'center',
@@ -215,7 +216,11 @@ function SettingTemplate({ theme, tittle, onPress, icon }) {
                 <ThemedText style={styles.tittleText}>{tittle}</ThemedText>
             </ThemedView>
             <ThemedView style={styles.arrow}>
-                <AntDesign name="right" size={20} color={theme.textSecondary} />
+                <AntDesign
+                    name="right"
+                    size={horizontalScale(20)}
+                    color={theme.textSecondary}
+                />
             </ThemedView>
         </Pressable>
     );
@@ -225,18 +230,18 @@ function Logout({ theme }) {
     const styles = StyleSheet.create({
         container: {
             flex: 0,
-            height: 60,
+            height: verticalScale(60),
             width: '80%',
             borderWidth: 2,
             borderColor: theme.borderColor,
             margin: 'auto',
-            marginTop: 40,
+            marginTop: verticalScale(40),
             justifyContent: 'center',
             alignItems: 'center',
         },
         text: {
-            fontSize: 24,
-            lineHeight: 26,
+            fontSize: fontScale(24),
+            lineHeight: verticalScale(26),
             fontFamily: 'InstrumentSans_500Medium',
         },
     });
@@ -265,7 +270,7 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
-            paddingHorizontal: 24,
+            paddingHorizontal: horizontalScale(24),
             backgroundColor: '#00000060',
         },
         overlay: {
@@ -275,33 +280,33 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
         popup: {
             backgroundColor: theme.background,
             width: '100%',
-            borderRadius: 16,
+            borderRadius: horizontalScale(16),
             borderWidth: 1,
             borderColor: theme.borderColor,
             zIndex: 20,
         },
         cancel: {
-            height: 50,
+            height: verticalScale(50),
             justifyContent: 'center',
             alignItems: 'center',
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderRadius: 16,
-            marginTop: 10,
+            borderRadius: horizontalScale(16),
+            marginTop: verticalScale(10),
         },
         cancelText: {
-            fontSize: 20,
+            fontSize: fontScale(20),
             fontFamily: 'InstrumentSans_600SemiBold',
             color: theme.textSecondary,
         },
         title: {
-            paddingVertical: 15,
-            fontSize: 22,
-            lineHeight: 26,
+            paddingVertical: verticalScale(15),
+            fontSize: fontScale(22),
+            lineHeight: verticalScale(26),
             borderWidth: 1,
             borderColor: theme.borderColorLight,
-            borderTopLeftRadius: 16,
-            borderTopRightRadius: 16,
+            borderTopLeftRadius: horizontalScale(16),
+            borderTopRightRadius: horizontalScale(16),
             textAlign: 'center',
             fontFamily: 'InstrumentSans_600SemiBold',
         },
@@ -379,8 +384,8 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                 style={{
                                     borderColor: theme.borderColor,
                                     borderWidth: 1,
-                                    marginTop: 10,
-                                    marginHorizontal: 18,
+                                    marginTop: verticalScale(10),
+                                    marginHorizontal: horizontalScale(18),
                                 }}>
                                 <Picker
                                     selectedValue={selectedTheme}
@@ -396,7 +401,7 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                         label="System"
                                         value={'system'}
                                         style={{
-                                            fontSize: 20,
+                                            fontSize: fontScale(20),
                                             color: theme.text,
                                         }}
                                     />
@@ -404,7 +409,7 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                         label="Dark"
                                         value={'dark'}
                                         style={{
-                                            fontSize: 20,
+                                            fontSize: fontScale(20),
                                             color: theme.text,
                                         }}
                                     />
@@ -412,7 +417,7 @@ function CustomizationPopup({ theme, type, visible, onClose }) {
                                         label="Light"
                                         value={'light'}
                                         style={{
-                                            fontSize: 20,
+                                            fontSize: fontScale(20),
                                             color: theme.text,
                                         }}
                                     />
