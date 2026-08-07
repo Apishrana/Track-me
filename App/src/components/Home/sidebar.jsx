@@ -74,14 +74,14 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
             fontSize: 24,
             lineHeight: 30,
             includeFontPadding: false,
-            flexShrink: 1,
+            flex: 1,
         },
         settingText: {
             fontFamily: 'InstrumentSans_500Medium',
             fontSize: 20,
             lineHeight: 26,
             includeFontPadding: false,
-            flexShrink: 1,
+            flex: 1,
         },
         userIcon: {
             height: 45,
@@ -214,6 +214,7 @@ function GroupTab({ theme, groups }) {
         groupsText: {
             fontFamily: 'InstrumentSans_500Medium',
             fontSize: 20,
+            flex: 1,
         },
         arrowIconContainer: {
             backgroundColor: '#00000000',
