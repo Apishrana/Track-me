@@ -46,6 +46,7 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
         settingContainer: {
             height: verticalScale(50),
             paddingVertical: verticalScale(10),
+            paddingHorizontal: horizontalScale(10),
             borderTopWidth: 1,
             borderColor: theme.borderColorLight,
             flex: 0,
@@ -55,6 +56,7 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
         userContainer: {
             height: verticalScale(50),
             paddingVertical: verticalScale(10),
+            paddingHorizontal: horizontalScale(10),
             borderTopWidth: 1,
             borderColor: theme.borderColor,
             flex: 0,
@@ -73,7 +75,7 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
         nameText: {
             fontFamily: 'InstrumentSans_600SemiBold',
             fontSize: fontScale(24),
-            lineHeight: verticalScale(30),
+            lineHeight: fontScale(30),
             includeFontPadding: false,
             flex: 1,
         },
@@ -85,9 +87,10 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
             flex: 1,
         },
         userIcon: {
-            height: verticalScale(45),
+            height: verticalScale(40),
             aspectRatio: 1,
             borderRadius: verticalScale(23),
+            backgroundColor: '#ff6a00',
         },
         settingIcon: {
             height: verticalScale(35),
@@ -110,11 +113,7 @@ export default function Sidebar({ isOpen, user, groups, setHamburgerOpen }) {
                     onPress={() => {
                         router.push(`/setting`);
                     }}>
-                    <ThemedView
-                        style={[
-                            styles.iconContainer,
-                            { marginRight: horizontalScale(5) },
-                        ]}>
+                    <ThemedView style={styles.iconContainer}>
                         <Feather
                             name="settings"
                             size={horizontalScale(35)}

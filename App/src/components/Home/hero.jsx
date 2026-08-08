@@ -34,12 +34,13 @@ export default function Hero({
         },
         nameText: {
             fontSize: fontScale(35),
-            height: verticalScale(32),
+            lineHeight: fontScale(40),
             fontFamily: 'InstrumentSans_500Medium',
             marginBottom: verticalScale(5),
         },
         selectGroupText: {
             fontSize: fontScale(26),
+            lineHeight: fontScale(30),
             fontFamily: 'InstrumentSans_500Medium',
             flex: 1,
         },
@@ -136,20 +137,24 @@ function GroupTemplate({ group }) {
             backgroundColor: '#f00',
         },
         infoContainer: {
-            justifyContent: 'center',
+            justifyContent: 'space-around',
             flex: 1,
             height: '100%',
             backgroundColor: '#ffffff00',
         },
         groupName: {
+            marginTop: verticalScale(5),
             fontFamily: 'InstrumentSans_400Regular',
             fontSize: fontScale(22),
+            lineHeight: fontScale(26),
             marginRight: horizontalScale(15),
         },
         userName: {
             fontFamily: 'InstrumentSans_400Regular',
             fontSize: fontScale(20),
+            lineHeight: fontScale(24),
             marginRight: horizontalScale(15),
+            marginBottom: verticalScale(5),
         },
     });
     return (

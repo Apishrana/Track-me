@@ -76,6 +76,7 @@ export default function Navbar({
         },
         title: {
             fontSize: fontScale(32),
+            lineHeight: fontScale(36),
             fontFamily: 'InstrumentSans_500Medium',
             flex: 1,
             textAlign: 'center',
